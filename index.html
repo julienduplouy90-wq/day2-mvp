@@ -59,7 +59,7 @@
   .brand-name span { color: var(--primary); }
   .tagline { text-align: center; color: var(--text-faint); font-size: 13px; margin-bottom: 26px; }
   .step-track { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 18px; }
-  .step-track .label { font-size: 11.5px; font-weight: 600; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.4px; }
+  .step-track .label { font-size: 11px; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.6px; }
   .step-dots { display: flex; gap: 5px; }
   .step-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: all 0.2s; }
   .step-dots span.active { background: var(--primary); width: 18px; border-radius: 100px; }
@@ -74,10 +74,10 @@
   }
   @keyframes pop { from { opacity: 0; transform: translateY(10px) scale(0.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
   h1.title { font-size: 22px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; }
-  h2.subtitle { font-size: 16.5px; font-weight: 700; margin-bottom: 4px; }
+  h2.subtitle { font-size: 15.5px; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.1px; }
   p.lead { color: var(--text-dim); font-size: 14px; line-height: 1.5; margin: 0 0 4px; }
   .field { margin-top: 18px; }
-  .field-label { display: block; font-size: 12.5px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .field-label { display: block; font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 8px; letter-spacing: 0.1px; }
   input[type=text] {
     width: 100%; background: var(--surface-alt); border: 1.5px solid var(--border);
     border-radius: var(--radius-md); padding: 13px 15px; color: var(--text);
@@ -89,7 +89,7 @@
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     width: 100%; text-align: center; background: var(--primary); color: white;
     border: none; border-radius: var(--radius-md); padding: 15px 18px;
-    font-size: 15px; font-weight: 700; font-family: 'Inter', sans-serif;
+    font-size: 14.5px; font-weight: 700; font-family: 'Inter', sans-serif; letter-spacing: 0.1px;
     cursor: pointer; margin-top: 22px; transition: transform 0.12s, box-shadow 0.15s, opacity .15s;
     box-shadow: var(--shadow-btn);
   }
@@ -109,24 +109,26 @@
   .chip-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
   .chip {
     --chip-bg: var(--surface-alt); --chip-fg: var(--text);
-    display: inline-flex; align-items: center; gap: 6px;
+    display: inline-flex; align-items: center; gap: 7px;
     padding: 10px 15px; border-radius: 100px; border: 1.5px solid var(--border);
     background: var(--surface-alt); color: var(--text);
     font-size: 13.5px; font-weight: 600; font-family: inherit;
     cursor: pointer; transition: all .15s;
   }
   .chip:hover { border-color: var(--primary); transform: translateY(-1px); }
-  .chip.selected { background: var(--chip-bg); border-color: var(--chip-fg); color: var(--chip-fg); box-shadow: 0 3px 10px -4px rgba(0,0,0,0.15); }
-  .chip .ic { font-size: 15px; }
-  .choice-cards { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+  .chip.selected { background: var(--chip-bg); border-color: var(--chip-fg); color: var(--chip-fg); box-shadow: 0 3px 10px -4px rgba(0,0,0,0.12); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .choice-cards { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
   .choice-card {
-    display: flex; align-items: flex-start; gap: 12px; text-align: left;
-    padding: 16px 17px; border-radius: var(--radius-md); border: 1.5px solid var(--border);
+    display: block; text-align: left; width: 100%;
+    padding: 15px 17px; border-radius: var(--radius-md); border: 1.5px solid var(--border);
+    border-left: 3px solid var(--border);
     background: var(--surface-alt); cursor: pointer; transition: all .15s; font-family: inherit;
   }
   .choice-card:hover { border-color: var(--primary); background: var(--primary-soft); transform: translateY(-1px); }
-  .choice-card .emoji { font-size: 24px; line-height: 1; }
-  .choice-card h4 { font-size: 14.5px; font-weight: 700; margin-bottom: 2px; }
+  .choice-card.accent-neutral { border-left-color: var(--text-faint); }
+  .choice-card.accent-warn { border-left-color: var(--amber); }
+  .choice-card h4 { font-size: 14.5px; font-weight: 700; margin-bottom: 3px; }
   .choice-card p { margin: 0; font-size: 12.5px; color: var(--text-dim); line-height: 1.4; }
   .pill {
     display: inline-flex; align-items: center; gap: 6px; background: var(--primary-soft);
@@ -148,8 +150,8 @@
   }
   .journal-item .info { min-width: 0; }
   .journal-item .name { font-weight: 700; font-size: 14px; }
-  .journal-item .meta-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
-  .tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
+  .journal-item .meta-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+  .tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
   .tag.outcome-completed { background: var(--green-soft); color: #0f9463; }
   .days-held { font-size: 11px; color: var(--text-faint); font-weight: 600; }
   .remove-x { cursor: pointer; color: var(--text-faint); font-size: 15px; flex-shrink: 0; padding: 4px; }
@@ -165,22 +167,28 @@
   .pattern-stat .lbl { font-size: 11px; color: var(--text-faint); margin-top: 3px; font-weight: 600; line-height: 1.3; }
   .footer-link { text-align: center; display: block; color: var(--text-faint); font-size: 12px; margin-top: 18px; text-decoration: none; }
   .footer-link:hover { color: var(--text-dim); }
-  .value-list { list-style: none; padding: 0; margin: 18px 0; display: flex; flex-direction: column; gap: 11px; }
-  .value-list li { display: flex; gap: 10px; align-items: center; font-size: 13.5px; color: var(--text); font-weight: 600; }
-  .value-list .ico { font-size: 18px; width: 26px; text-align: center; flex-shrink: 0; }
+  .value-list { list-style: none; padding: 0; margin: 18px 0; display: flex; flex-direction: column; gap: 12px; }
+  .value-list li { display: flex; gap: 12px; align-items: center; font-size: 13.5px; color: var(--text); font-weight: 600; }
+  .num-badge {
+    width: 22px; height: 22px; border-radius: 50%; background: var(--primary-soft); color: var(--primary-dark);
+    display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 800;
+    flex-shrink: 0; font-family: 'Sora', sans-serif;
+  }
   .badge-mvp {
-    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.4px;
-    padding: 4px 11px; border-radius: 100px; background: var(--amber-soft); color: #92620a; margin-bottom: 14px;
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.5px;
+    padding: 4px 11px; border-radius: 100px; background: var(--surface-alt); color: var(--text-dim);
+    border: 1px solid var(--border); margin-bottom: 14px; text-transform: uppercase;
   }
   .personal-note {
     background: var(--primary-soft); border: 1px solid #6d5efc30; border-radius: var(--radius-md);
     padding: 13px 15px; font-size: 13px; color: var(--primary-dark); line-height: 1.5; margin: 16px 0 4px;
   }
-  .completion-banner { background: var(--green-soft); border: 1px solid #16b57945; border-radius: var(--radius-md); padding: 18px; margin-top: 14px; text-align: center; }
-  .completion-banner .emoji { font-size: 28px; margin-bottom: 4px; }
+  .completion-banner { background: var(--green-soft); border: 1px solid #16b57945; border-radius: var(--radius-md); padding: 20px; margin-top: 14px; text-align: center; }
+  .completion-banner .check-badge { width: 36px; height: 36px; border-radius: 50%; background: var(--green); color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
   .completion-banner h3 { font-size: 15.5px; color: #0f9463; margin-bottom: 4px; }
   .completion-banner p { margin: 0; font-size: 12.5px; color: var(--text-dim); }
   .global-footer { color: var(--text-faint); font-size: 11px; text-align: center; margin-top: 20px; }
+  .icon-inline { width: 12px; height: 12px; vertical-align: -1.5px; }
 </style>
 </head>
 <body>
@@ -189,55 +197,49 @@
   <div class="tagline">Le jour où la motivation retombe — et où tu tiens quand même.</div>
   <div id="root"></div>
 </div>
-<div class="global-footer">Day 2 · MVP v0.2</div>
+<div class="global-footer">Day 2 · MVP v0.3</div>
 
 <script>
 const STORAGE_KEY = "day2_state_v3";
+const CHECK_SVG = `<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+const CHECK_SVG_LG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><polyline points="20 6 9 17 4 12"/></svg>`;
 
 function loadState() {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (raw) return JSON.parse(raw);
   return {
-    seenLanding: false,
-    onboarded: false,
-    onboardingStep: null,
-    pastAbandons: [],
-    currentEngagement: null,
-    history: [],
-    pivotDraft: null,
-    addingPast: false
+    seenLanding: false, onboarded: false, onboardingStep: null,
+    pastAbandons: [], currentEngagement: null, history: [],
+    pivotDraft: null, addingPast: false
   };
 }
 function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); render(); }
 let state = loadState();
 
 const REASONS = [
-  { key: "resultats", label: "Pas de résultats", icon: "📉", bg: "#e8f1ff", fg: "#2563eb" },
-  { key: "commercial", label: "Trop dur à vendre", icon: "🤝", bg: "#fff1e6", fg: "#ea580c" },
-  { key: "lassitude", label: "Lassitude", icon: "😴", bg: "#f3e8ff", fg: "#9333ea" },
-  { key: "doute", label: "Doute / sens", icon: "🌀", bg: "#e6fbf7", fg: "#0d9488" },
-  { key: "externe", label: "Avis extérieur", icon: "👥", bg: "#ffe8f3", fg: "#db2777" },
-  { key: "autre", label: "Autre", icon: "✳️", bg: "#f1f0f4", fg: "#64748b" }
+  { key: "resultats", label: "Pas de résultats", bg: "#e8f1ff", fg: "#2563eb" },
+  { key: "commercial", label: "Trop dur à vendre", bg: "#fff1e6", fg: "#ea580c" },
+  { key: "lassitude", label: "Lassitude", bg: "#f3e8ff", fg: "#9333ea" },
+  { key: "doute", label: "Doute / sens", bg: "#e6fbf7", fg: "#0d9488" },
+  { key: "externe", label: "Avis extérieur", bg: "#ffe8f3", fg: "#db2777" },
+  { key: "autre", label: "Autre", bg: "#f1f0f4", fg: "#64748b" }
 ];
 const DURATION_BUCKETS = [
-  { value: "unknown", label: "Je sais plus", icon: "🤷", days: null },
-  { value: "lt1w", label: "< 1 semaine", icon: "⚡", days: 5 },
-  { value: "1to4w", label: "1-4 semaines", icon: "📅", days: 15 },
-  { value: "1to3m", label: "1-3 mois", icon: "🌙", days: 60 },
-  { value: "3to6m", label: "3-6 mois", icon: "☀️", days: 135 },
-  { value: "gt6m", label: "6 mois +", icon: "🏔️", days: 200 }
+  { value: "unknown", label: "Je sais plus", days: null },
+  { value: "lt1w", label: "< 1 semaine", days: 5 },
+  { value: "1to4w", label: "1-4 semaines", days: 15 },
+  { value: "1to3m", label: "1-3 mois", days: 60 },
+  { value: "3to6m", label: "3-6 mois", days: 135 },
+  { value: "gt6m", label: "6 mois +", days: 200 }
 ];
 const ENGAGEMENT_DURATIONS = [
   { value: 30, label: "1 mois" }, { value: 60, label: "2 mois" },
   { value: 90, label: "3 mois" }, { value: 180, label: "6 mois" }
 ];
 const MOTIVATIONS = [
-  { value: "argent", label: "Argent", icon: "💰" },
-  { value: "sens", label: "Sens", icon: "🧠" },
-  { value: "impact", label: "Impact", icon: "🚀" },
-  { value: "reconnaissance", label: "Reconnaissance", icon: "🏆" },
-  { value: "liberte", label: "Liberté", icon: "🕊️" },
-  { value: "passion", label: "Passion", icon: "🔥" }
+  { value: "argent", label: "Argent" }, { value: "sens", label: "Sens" },
+  { value: "impact", label: "Impact" }, { value: "reconnaissance", label: "Reconnaissance" },
+  { value: "liberte", label: "Liberté" }, { value: "passion", label: "Passion" }
 ];
 
 function reasonMeta(key) { return REASONS.find(r => r.key === key) || REASONS[REASONS.length - 1]; }
@@ -250,8 +252,11 @@ function stepTrack(label, current, total) {
   for (let i = 0; i < total; i++) dots += `<span class="${i === current - 1 ? 'active' : ''}"></span>`;
   return `<div class="step-track"><span class="label">${label}</span><div class="step-dots">${dots}</div></div>`;
 }
+function tagHTML(reasonKey) {
+  const m = reasonMeta(reasonKey);
+  return `<span class="tag" style="background:${m.bg};color:${m.fg}"><span class="dot" style="background:${m.fg}"></span>${m.label}</span>`;
+}
 
-// Reusable single-choice chip group. Returns {container, get, set}
 function buildSingleChoice(items, initial, colored) {
   let value = initial;
   const container = el(`<div class="chip-group"></div>`);
@@ -259,7 +264,8 @@ function buildSingleChoice(items, initial, colored) {
     container.innerHTML = '';
     items.forEach(it => {
       const key = it.key || it.value;
-      const chip = el(`<button type="button" class="chip ${key === value ? 'selected' : ''}"><span class="ic">${it.icon || ''}</span><span>${it.label}</span></button>`);
+      const dot = (colored && it.fg) ? `<span class="dot" style="background:${it.fg}"></span>` : '';
+      const chip = el(`<button type="button" class="chip ${key === value ? 'selected' : ''}">${dot}<span>${it.label}</span></button>`);
       if (colored && it.bg) { chip.style.setProperty('--chip-bg', it.bg); chip.style.setProperty('--chip-fg', it.fg); }
       chip.onclick = () => { value = key; paint(); };
       container.appendChild(chip);
@@ -268,14 +274,13 @@ function buildSingleChoice(items, initial, colored) {
   paint();
   return { container, get: () => value };
 }
-// Reusable multi-choice chip group.
 function buildMultiChoice(items, initial) {
   const set = new Set(initial || []);
   const container = el(`<div class="chip-group"></div>`);
   function paint() {
     container.innerHTML = '';
     items.forEach(it => {
-      const chip = el(`<button type="button" class="chip ${set.has(it.value) ? 'selected' : ''}"><span class="ic">${it.icon}</span><span>${it.label}</span></button>`);
+      const chip = el(`<button type="button" class="chip ${set.has(it.value) ? 'selected' : ''}">${set.has(it.value) ? CHECK_SVG : ''}<span>${it.label}</span></button>`);
       chip.onclick = () => { set.has(it.value) ? set.delete(it.value) : set.add(it.value); paint(); };
       container.appendChild(chip);
     });
@@ -292,7 +297,6 @@ function formatHeld(record) {
   if (typeof record.daysHeldEstimate === 'number') return record.daysHeldEstimate + 'j';
   return null;
 }
-
 function getAllAbandonRecords() {
   return [...state.pastAbandons, ...(state.history || []).filter(h => h.outcome === 'abandoned')];
 }
@@ -313,16 +317,16 @@ function renderLanding() {
   const root = document.getElementById('root'); root.innerHTML = '';
   const card = el(`
     <div class="card">
-      <span class="badge-mvp">MVP · TEST EN COURS</span>
+      <span class="badge-mvp">MVP · Test en cours</span>
       <h1 class="title">Ne lâche plus au jour 2.</h1>
       <p class="lead">Reste sur une idée, plus longtemps que d'habitude.</p>
       <ul class="value-list">
-        <li><span class="ico">📓</span>Ton historique d'abandons</li>
-        <li><span class="ico">🎯</span>Un engagement clair et daté</li>
-        <li><span class="ico">🛑</span>Une pause avant de tout lâcher</li>
+        <li><span class="num-badge">1</span>Ton historique d'abandons</li>
+        <li><span class="num-badge">2</span>Un engagement clair et daté</li>
+        <li><span class="num-badge">3</span>Une pause avant de tout lâcher</li>
       </ul>
       <div class="personal-note">Je vis ce pattern moi-même. Cet outil, c'est celui que j'aurais aimé avoir.</div>
-      <button class="btn" id="start-btn">Commencer →</button>
+      <button class="btn" id="start-btn">Commencer</button>
     </div>
   `);
   root.appendChild(card);
@@ -361,15 +365,14 @@ function renderOnboardingJournal() {
 
   const list = card.querySelector('#abandon-list');
   abandons.forEach(a => {
-    const rm = reasonMeta(a.reasonCategory);
     const held = formatHeld(a);
     list.appendChild(el(`
       <div class="journal-item">
         <div class="info">
           <div class="name">${a.name}</div>
-          <div class="meta-row"><span class="tag" style="background:${rm.bg};color:${rm.fg}">${rm.icon} ${rm.label}</span>${held ? `<span class="days-held">${held}</span>` : ''}</div>
+          <div class="meta-row">${tagHTML(a.reasonCategory)}${held ? `<span class="days-held">${held}</span>` : ''}</div>
         </div>
-        <span class="remove-x" data-id="${a.id}">✕</span>
+        <span class="remove-x" data-id="${a.id}">&times;</span>
       </div>
     `));
   });
@@ -446,12 +449,12 @@ function renderDashboard() {
   const pct = Math.min(100, Math.round((dayNum / eng.durationDays) * 100));
   const remaining = Math.max(0, eng.durationDays - dayNum);
   const isComplete = dayNum >= eng.durationDays;
-  const motivIcons = (eng.motivations || []).map(m => (MOTIVATIONS.find(x => x.value === m) || {}).icon || '').join(' ');
-  const whyLine = [motivIcons, eng.whyShort].filter(Boolean).join(' — ');
+  const motivLabels = (eng.motivations || []).map(m => (MOTIVATIONS.find(x => x.value === m) || {}).label).filter(Boolean).join(' · ');
+  const whyLine = [motivLabels, eng.whyShort].filter(Boolean).join(' — ');
 
   const card = el(`
     <div class="card">
-      <span class="pill">📆 Jour ${dayNum} / ${eng.durationDays}</span>
+      <span class="pill">Jour ${dayNum} / ${eng.durationDays}</span>
       <h1 class="title">${eng.name}</h1>
       <div class="progress-wrap">
         <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
@@ -460,13 +463,13 @@ function renderDashboard() {
       ${whyLine ? `<div class="why-box">${whyLine}</div>` : ''}
       ${isComplete ? `
         <div class="completion-banner">
-          <div class="emoji">🎉</div>
-          <h3>Engagement tenu !</h3>
+          <div class="check-badge">${CHECK_SVG_LG}</div>
+          <h3>Engagement tenu</h3>
           <p>${eng.durationDays} jours sur "${eng.name}". À toi la suite.</p>
         </div>
         <button class="btn green" id="extend-engagement">Prolonger de ${eng.durationDays}j</button>
         <button class="btn secondary" id="new-after-complete">Nouveau projet</button>
-      ` : `<button class="btn amber" id="want-pivot">😬 Envie de tout changer</button>`}
+      ` : `<button class="btn amber" id="want-pivot">Envie de tout changer ?</button>`}
     </div>
   `);
   root.appendChild(card);
@@ -491,12 +494,12 @@ function renderDashboard() {
     const rm = reasonMeta(insight.topReason);
     const patternCard = el(`
       <div class="card">
-        <h2 class="subtitle">🔍 Ton pattern</h2>
+        <h2 class="subtitle">Ton pattern</h2>
         <div class="pattern-grid">
           <div class="pattern-stat"><div class="num">${insight.total}</div><div class="lbl">abandon${insight.total > 1 ? 's' : ''}</div></div>
           <div class="pattern-stat"><div class="num">${insight.avgDays !== null ? insight.avgDays + 'j' : '—'}</div><div class="lbl">tenu en moyenne</div></div>
         </div>
-        <p class="lead" style="margin-top:12px">Raison n°1 : <b style="color:var(--text)">${rm.icon} ${rm.label}</b> (${insight.topCount}×)</p>
+        <p class="lead" style="margin-top:12px">Raison n°1 : <b style="color:var(--text)">${rm.label}</b> (${insight.topCount}×)</p>
       </div>
     `);
     root.appendChild(patternCard);
@@ -504,7 +507,7 @@ function renderDashboard() {
 
   const journalCard = el(`
     <div class="card">
-      <h2 class="subtitle">📓 Ton journal (${state.pastAbandons.length + (state.history || []).length})</h2>
+      <h2 class="subtitle">Ton journal (${state.pastAbandons.length + (state.history || []).length})</h2>
       <div id="journal-list" style="margin-top:12px"></div>
       <button class="btn ghost" id="add-past">+ Ajouter un abandon passé</button>
     </div>
@@ -516,13 +519,12 @@ function renderDashboard() {
   if (combined.length === 0) jlist.appendChild(el(`<p class="lead" style="margin:0">Rien pour l'instant.</p>`));
   combined.forEach(a => {
     const held = formatHeld(a);
-    const rm = a.outcome === 'abandoned' ? reasonMeta(a.reasonCategory) : null;
     jlist.appendChild(el(`
       <div class="journal-item">
         <div class="info">
           <div class="name">${a.name}</div>
           <div class="meta-row">
-            ${a.outcome === 'completed' ? `<span class="tag outcome-completed">✅ réussi</span>` : `<span class="tag" style="background:${rm.bg};color:${rm.fg}">${rm.icon} ${rm.label}</span>`}
+            ${a.outcome === 'completed' ? `<span class="tag outcome-completed">${CHECK_SVG} Réussi</span>` : tagHTML(a.reasonCategory)}
             ${held ? `<span class="days-held">${held}</span>` : ''}
           </div>
         </div>
@@ -618,23 +620,22 @@ function renderPivotFlow() {
     const card = el(`
       <div class="card">
         ${stepTrack('Étape 2 / 4', 2, 4)}
-        <h2 class="subtitle">📓 Ton miroir</h2>
+        <h2 class="subtitle">Ton miroir</h2>
         <div id="mirror-list" style="margin-top:10px"></div>
         <div class="insight-box">${insight}</div>
-        <button class="btn" id="mirror-continue">Continuer →</button>
+        <button class="btn" id="mirror-continue">Continuer</button>
       </div>
     `);
     root.appendChild(card);
     const mlist = card.querySelector('#mirror-list');
     if (records.length === 0) mlist.appendChild(el(`<p class="lead" style="margin:0 0 4px">Ton journal est vide.</p>`));
     records.forEach(a => {
-      const m = reasonMeta(a.reasonCategory);
       const held = formatHeld(a);
       mlist.appendChild(el(`
         <div class="journal-item">
           <div class="info">
             <div class="name">${a.name}</div>
-            <div class="meta-row"><span class="tag" style="background:${m.bg};color:${m.fg}">${m.icon} ${m.label}</span>${held ? `<span class="days-held">${held}</span>` : ''}</div>
+            <div class="meta-row">${tagHTML(a.reasonCategory)}${held ? `<span class="days-held">${held}</span>` : ''}</div>
           </div>
         </div>
       `));
@@ -649,13 +650,13 @@ function renderPivotFlow() {
         ${stepTrack('Étape 3 / 4', 3, 4)}
         <h1 class="title">Vrai signal, ou fuite ?</h1>
         <div class="choice-cards">
-          <button type="button" class="choice-card" id="is-leak">
-            <span class="emoji">🌫️</span>
-            <span><h4>C'est une fuite</h4><p>Baisse de motivation, pas encore de preuve. Je continue.</p></span>
+          <button type="button" class="choice-card accent-neutral" id="is-leak">
+            <h4>C'est une fuite</h4>
+            <p>Baisse de motivation, pas encore de preuve. Je continue.</p>
           </button>
-          <button type="button" class="choice-card" id="is-signal">
-            <span class="emoji">🎯</span>
-            <span><h4>C'est un vrai signal</h4><p>Preuve concrète que ça ne marche pas. J'arrête.</p></span>
+          <button type="button" class="choice-card accent-warn" id="is-signal">
+            <h4>C'est un vrai signal</h4>
+            <p>Preuve concrète que ça ne marche pas. J'arrête.</p>
           </button>
         </div>
       </div>
@@ -680,7 +681,7 @@ function renderPivotFlow() {
       </div>
     `);
     root.appendChild(card);
-    const retryChoice = buildSingleChoice([{ value: 'yes', label: 'Peut-être un jour', icon: '🔁' }, { value: 'no', label: 'Non, terminé', icon: '🚫' }], null, false);
+    const retryChoice = buildSingleChoice([{ value: 'yes', label: 'Peut-être un jour' }, { value: 'no', label: 'Non, terminé' }], null, false);
     card.querySelector('#retry-slot').appendChild(retryChoice.container);
     card.querySelector('#confirm-abandon').onclick = () => {
       state.history.push({
