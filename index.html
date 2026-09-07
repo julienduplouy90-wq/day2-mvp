@@ -213,7 +213,7 @@ function loadState() {
   return {
     seenLanding: false, onboarded: false, onboardingStep: null,
     pastAbandons: [], currentEngagement: null, history: [],
-    pivotDraft: null, addingPast: false
+    pivotDraft: null, addingPast: false, addingSignal: false, bestSignal: null
   };
 }
 function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); render(); }
@@ -225,6 +225,7 @@ const REASONS = [
   { key: "lassitude", label: "Lassitude", bg: "#f3e8ff", fg: "#9333ea" },
   { key: "doute", label: "Doute / sens", bg: "#e6fbf7", fg: "#0d9488" },
   { key: "externe", label: "Avis extérieur", bg: "#ffe8f3", fg: "#db2777" },
+  { key: "vie", label: "Événement de vie", bg: "#fef9c3", fg: "#a16207" },
   { key: "autre", label: "Autre", bg: "#f1f0f4", fg: "#64748b" }
 ];
 const DURATION_BUCKETS = [
@@ -522,6 +523,18 @@ function renderDashboard() {
     root.appendChild(patternCard);
   }
 
+  const signalCard = el(`
+    <div class="card">
+      <h2 class="subtitle">Meilleur signal</h2>
+      ${state.bestSignal
+        ? `<p class="lead" style="margin-top:8px;color:var(--text)">${state.bestSignal}</p><button class="btn ghost" id="edit-signal">Modifier</button>`
+        : `<p class="lead" style="margin-top:8px">Le plus petit signe positif que t'as eu jusqu'ici — même minime.</p><button class="btn secondary" id="add-signal">+ Noter mon meilleur signal</button>`}
+    </div>
+  `);
+  root.appendChild(signalCard);
+  const addSignalBtn = signalCard.querySelector('#add-signal') || signalCard.querySelector('#edit-signal');
+  if (addSignalBtn) addSignalBtn.onclick = () => { state.addingSignal = true; saveState(state); };
+
   const journalCard = el(`
     <div class="card">
       <h2 class="subtitle">Ton journal (${state.pastAbandons.length + (state.history || []).length})</h2>
@@ -599,6 +612,26 @@ function renderAddPastFromDashboard() {
   card.querySelector('#cancel-ab').onclick = () => { state.addingPast = false; saveState(state); };
 }
 
+function renderAddSignal() {
+  const root = document.getElementById('root'); root.innerHTML = '';
+  const card = el(`
+    <div class="card">
+      <h2 class="subtitle">Ton meilleur signal</h2>
+      <p class="lead">Le meilleur signe positif que t'as eu jusqu'ici — une réponse chaleureuse, un client, une conversation qui a bien accroché. Même minime.</p>
+      <div class="field"><input type="text" id="signal-input" placeholder="Ex: Un ami m'a dit qu'il paierait pour ça" value="${state.bestSignal ? state.bestSignal.replace(/"/g, '&quot;') : ''}"></div>
+      <button class="btn" id="save-signal">Enregistrer</button>
+      <button class="btn secondary" id="cancel-signal">Annuler</button>
+    </div>
+  `);
+  root.appendChild(card);
+  card.querySelector('#save-signal').onclick = () => {
+    state.bestSignal = card.querySelector('#signal-input').value.trim() || null;
+    state.addingSignal = false;
+    saveState(state);
+  };
+  card.querySelector('#cancel-signal').onclick = () => { state.addingSignal = false; saveState(state); };
+}
+
 // ---------- ANTI-PIVOT FLOW ----------
 function renderPivotFlow() {
   const root = document.getElementById('root'); root.innerHTML = '';
@@ -633,23 +666,18 @@ function renderPivotFlow() {
     const records = getAllAbandonRecords();
     const matching = records.filter(r => (r.reasonCategories || []).some(rc => currentReasons.includes(rc)));
     const totalAbandons = records.length;
-    const insightData = computePatternInsight();
-    const eng = state.currentEngagement;
-    const currentDayNum = eng ? Math.max(1, daysBetween(new Date(eng.startDate), new Date()) + 1) : null;
     const reasonLabels = currentReasons.map(k => reasonMeta(k).label).join(', ');
 
     let insight = '';
-    if (matching.length > 0) insight = `Déjà ${matching.length} fois pour "${reasonLabels}". Ça ressemble à un pattern.`;
-    else if (totalAbandons > 0) insight = `Déjà ${totalAbandons} abandon${totalAbandons > 1 ? 's' : ''} avant celui-ci, raisons différentes cette fois.`;
-    else insight = `Ce serait ton premier abandon noté. Prends 2 min avant de trancher.`;
-    if (insightData && insightData.avgDays !== null && currentDayNum !== null) {
-      insight += ` Tu es à <b>${currentDayNum}j</b> ici, ta moyenne passée est <b>${insightData.avgDays}j</b>.`;
-    }
+    if (matching.length > 0) insight = `C'est la ${matching.length + 1}ᵉ fois que "${reasonLabels}" revient. Pas un échec — juste une info utile pour choisir en connaissance de cause.`;
+    else if (totalAbandons > 0) insight = `Tu as déjà changé de cap ${totalAbandons} fois avant. Ça fait partie du chemin — l'idée, c'est juste de le faire les yeux ouverts.`;
+    else insight = `Ce serait ta première bascule notée. Prends juste 2 minutes avant de trancher, sans pression.`;
 
     const card = el(`
       <div class="card">
         ${stepTrack('Étape 2 / 4', 2, 4)}
         <h2 class="subtitle">Ton miroir</h2>
+        <p class="lead">Juste pour info, sans jugement.</p>
         <div id="mirror-list" style="margin-top:10px"></div>
         <div class="insight-box">${insight}</div>
         <button class="btn" id="mirror-continue">Continuer</button>
@@ -751,6 +779,7 @@ function render() {
   if (!state.onboarded) return state.onboardingStep === 2 ? renderOnboardingEngagement() : renderOnboardingJournal();
   if (!state.currentEngagement) return renderOnboardingEngagement();
   if (state.addingPast) return renderAddPastFromDashboard();
+  if (state.addingSignal) return renderAddSignal();
   return renderDashboard();
 }
 render();
