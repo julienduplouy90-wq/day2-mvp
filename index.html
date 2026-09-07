@@ -9,265 +9,190 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-0: #0a0b0f;
-    --bg-1: #12141c;
-    --card: #161923;
-    --card-border: #262b38;
-    --text: #f3f4f7;
-    --text-dim: #9aa2b4;
-    --text-faint: #676f82;
-    --primary: #7c6dfc;
-    --primary-hover: #8f82ff;
-    --primary-soft: #7c6dfc1f;
-    --amber: #f0a848;
-    --amber-soft: #f0a84820;
-    --red: #ff5c5c;
-    --red-soft: #ff5c5c1f;
-    --green: #45d18f;
-    --green-soft: #45d18f20;
-    --radius-lg: 20px;
-    --radius-md: 12px;
-    --shadow-card: 0 8px 30px -12px rgba(0,0,0,0.5);
+    --bg-a: #f6f4ff;
+    --bg-b: #fef9f4;
+    --surface: #ffffff;
+    --surface-alt: #f8f7fc;
+    --border: #eae7f5;
+    --text: #211c3d;
+    --text-dim: #6f6b87;
+    --text-faint: #a5a1b8;
+    --primary: #6d5efc;
+    --primary-dark: #5847e8;
+    --primary-soft: #efeaff;
+    --amber: #f59e0b;
+    --amber-soft: #fff3dd;
+    --red: #ef4a5f;
+    --red-soft: #ffe7ea;
+    --green: #16b579;
+    --green-soft: #e3f9ee;
+    --radius-lg: 22px;
+    --radius-md: 14px;
+    --shadow-card: 0 12px 32px -16px rgba(80, 60, 160, 0.18);
+    --shadow-btn: 0 8px 22px -8px rgba(109, 94, 252, 0.45);
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background:
-      radial-gradient(ellipse 900px 500px at 50% -10%, #241f3d 0%, transparent 60%),
-      linear-gradient(180deg, var(--bg-1), var(--bg-0) 65%);
-    background-attachment: fixed;
+    background: radial-gradient(ellipse 900px 500px at 15% -5%, var(--bg-a) 0%, transparent 55%),
+                radial-gradient(ellipse 900px 500px at 100% 0%, var(--bg-b) 0%, transparent 55%),
+                #fbfaff;
     color: var(--text);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 16px 30px;
+    padding: 36px 16px 30px;
   }
-  h1, h2, h3 { font-family: 'Sora', 'Inter', sans-serif; }
-  .app { width: 100%; max-width: 500px; flex: 1; }
-  .brand {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 6px;
-  }
+  h1, h2, h3, h4 { font-family: 'Sora', 'Inter', sans-serif; margin: 0; }
+  .app { width: 100%; max-width: 480px; }
+  .brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 4px; }
   .brand-mark {
-    width: 34px; height: 34px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--primary), #4f46e5);
+    width: 32px; height: 32px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary), #a78bfa);
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Sora', sans-serif;
-    font-weight: 800;
-    font-size: 15px;
-    color: white;
-    box-shadow: 0 4px 16px -4px var(--primary);
-    flex-shrink: 0;
+    font-family: 'Sora', sans-serif; font-weight: 800; font-size: 14px; color: white;
+    box-shadow: var(--shadow-btn); flex-shrink: 0;
   }
-  .brand-name { font-family: 'Sora', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+  .brand-name { font-family: 'Sora', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; color: var(--text); }
   .brand-name span { color: var(--primary); }
-  .tagline { text-align: center; color: var(--text-dim); font-size: 14px; margin-bottom: 32px; }
+  .tagline { text-align: center; color: var(--text-faint); font-size: 13px; margin-bottom: 26px; }
+  .step-track { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 18px; }
+  .step-track .label { font-size: 11.5px; font-weight: 600; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.4px; }
+  .step-dots { display: flex; gap: 5px; }
+  .step-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: all 0.2s; }
+  .step-dots span.active { background: var(--primary); width: 18px; border-radius: 100px; }
   .card {
-    background: var(--card);
-    border: 1px solid var(--card-border);
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 30px 26px;
-    margin-bottom: 16px;
+    padding: 28px 24px;
+    margin-bottom: 14px;
     box-shadow: var(--shadow-card);
-    animation: fadeIn 0.3s ease;
+    animation: pop 0.28s cubic-bezier(.2,.8,.2,1);
   }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-  h1.title { font-size: 23px; margin: 0 0 10px; letter-spacing: -0.3px; }
-  h2.subtitle { font-size: 17px; margin: 0 0 14px; font-weight: 700; }
-  p.lead { color: var(--text-dim); font-size: 14.5px; line-height: 1.55; margin: 0 0 4px; }
-  label { display: block; font-size: 12.5px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 7px; margin-top: 18px; }
-  input[type=text], input[type=number], textarea, select {
-    width: 100%;
-    background: var(--bg-0);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius-md);
-    padding: 12px 14px;
-    color: var(--text);
-    font-size: 14.5px;
-    font-family: inherit;
-    resize: vertical;
-    transition: border-color 0.15s;
+  @keyframes pop { from { opacity: 0; transform: translateY(10px) scale(0.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  h1.title { font-size: 22px; font-weight: 800; letter-spacing: -0.3px; margin-bottom: 6px; }
+  h2.subtitle { font-size: 16.5px; font-weight: 700; margin-bottom: 4px; }
+  p.lead { color: var(--text-dim); font-size: 14px; line-height: 1.5; margin: 0 0 4px; }
+  .field { margin-top: 18px; }
+  .field-label { display: block; font-size: 12.5px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  input[type=text] {
+    width: 100%; background: var(--surface-alt); border: 1.5px solid var(--border);
+    border-radius: var(--radius-md); padding: 13px 15px; color: var(--text);
+    font-size: 15px; font-family: inherit; transition: border-color .15s;
   }
-  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary); }
-  input::placeholder, textarea::placeholder { color: var(--text-faint); }
+  input[type=text]:focus { outline: none; border-color: var(--primary); background: white; }
+  input::placeholder { color: var(--text-faint); }
   .btn {
-    display: inline-block;
-    width: 100%;
-    text-align: center;
-    background: var(--primary);
-    color: white;
-    border: none;
-    border-radius: var(--radius-md);
-    padding: 14px 18px;
-    font-size: 15px;
-    font-weight: 700;
-    font-family: 'Inter', sans-serif;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: transform 0.1s, background 0.15s, box-shadow 0.15s;
-    box-shadow: 0 6px 20px -8px var(--primary);
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; text-align: center; background: var(--primary); color: white;
+    border: none; border-radius: var(--radius-md); padding: 15px 18px;
+    font-size: 15px; font-weight: 700; font-family: 'Inter', sans-serif;
+    cursor: pointer; margin-top: 22px; transition: transform 0.12s, box-shadow 0.15s, opacity .15s;
+    box-shadow: var(--shadow-btn);
   }
-  .btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
-  .btn:active { transform: translateY(0); }
-  .btn.secondary { background: transparent; border: 1px solid var(--card-border); color: var(--text); box-shadow: none; }
-  .btn.secondary:hover { border-color: var(--primary); background: var(--primary-soft); }
-  .btn.amber { background: var(--amber); color: #221703; box-shadow: 0 6px 20px -8px var(--amber); }
-  .btn.amber:hover { background: #f5b862; }
-  .btn.red { background: var(--red); box-shadow: 0 6px 20px -8px var(--red); }
-  .btn.red:hover { background: #ff7373; }
-  .btn.green { background: var(--green); color: #04241a; box-shadow: 0 6px 20px -8px var(--green); }
-  .btn.green:hover { background: #5be0a3; }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(0) scale(0.98); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn.secondary { background: var(--surface-alt); color: var(--text); box-shadow: none; border: 1.5px solid var(--border); }
+  .btn.secondary:hover { border-color: var(--primary); }
+  .btn.amber { background: var(--amber); box-shadow: 0 8px 22px -8px rgba(245, 158, 11, 0.5); }
+  .btn.red { background: var(--red); box-shadow: 0 8px 22px -8px rgba(239, 74, 95, 0.5); }
+  .btn.green { background: var(--green); box-shadow: 0 8px 22px -8px rgba(22, 181, 121, 0.5); }
   .btn.ghost {
-    background: none; border: none; box-shadow: none;
-    color: var(--text-faint);
-    text-decoration: underline;
-    width: auto; padding: 8px 0;
-    font-size: 13px; font-weight: 500;
-    margin-top: 10px;
+    background: none; box-shadow: none; color: var(--text-faint); text-decoration: underline;
+    width: auto; padding: 6px 0; font-size: 13px; font-weight: 500; margin-top: 8px;
   }
   .btn.ghost:hover { color: var(--text-dim); transform: none; }
-  .pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--primary-soft);
-    border: 1px solid #7c6dfc40;
-    color: #c3baff;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 4px 12px;
-    border-radius: 100px;
-    margin-bottom: 14px;
+  .chip-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .chip {
+    --chip-bg: var(--surface-alt); --chip-fg: var(--text);
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 15px; border-radius: 100px; border: 1.5px solid var(--border);
+    background: var(--surface-alt); color: var(--text);
+    font-size: 13.5px; font-weight: 600; font-family: inherit;
+    cursor: pointer; transition: all .15s;
   }
-  .progress-wrap { margin: 18px 0 4px; }
-  .progress-bar { height: 8px; background: var(--bg-0); border-radius: 100px; overflow: hidden; border: 1px solid var(--card-border); }
+  .chip:hover { border-color: var(--primary); transform: translateY(-1px); }
+  .chip.selected { background: var(--chip-bg); border-color: var(--chip-fg); color: var(--chip-fg); box-shadow: 0 3px 10px -4px rgba(0,0,0,0.15); }
+  .chip .ic { font-size: 15px; }
+  .choice-cards { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+  .choice-card {
+    display: flex; align-items: flex-start; gap: 12px; text-align: left;
+    padding: 16px 17px; border-radius: var(--radius-md); border: 1.5px solid var(--border);
+    background: var(--surface-alt); cursor: pointer; transition: all .15s; font-family: inherit;
+  }
+  .choice-card:hover { border-color: var(--primary); background: var(--primary-soft); transform: translateY(-1px); }
+  .choice-card .emoji { font-size: 24px; line-height: 1; }
+  .choice-card h4 { font-size: 14.5px; font-weight: 700; margin-bottom: 2px; }
+  .choice-card p { margin: 0; font-size: 12.5px; color: var(--text-dim); line-height: 1.4; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px; background: var(--primary-soft);
+    border: 1px solid #6d5efc35; color: var(--primary-dark); font-size: 12px; font-weight: 700;
+    padding: 5px 13px; border-radius: 100px; margin-bottom: 14px;
+  }
+  .progress-wrap { margin: 16px 0 4px; }
+  .progress-bar { height: 9px; background: var(--surface-alt); border-radius: 100px; overflow: hidden; border: 1px solid var(--border); }
   .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), #a78bfa); border-radius: 100px; transition: width 0.4s ease; }
-  .progress-label { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--text-faint); margin-top: 7px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-faint); margin-top: 7px; font-weight: 600; }
   .why-box {
-    background: var(--bg-0);
-    border-left: 3px solid var(--primary);
-    padding: 13px 15px;
-    border-radius: 0 var(--radius-md) var(--radius-md) 0;
-    font-size: 14px;
-    color: var(--text-dim);
-    font-style: italic;
-    margin-top: 18px;
-    line-height: 1.5;
+    background: var(--surface-alt); border-left: 3px solid var(--primary);
+    padding: 13px 15px; border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-size: 13.5px; color: var(--text-dim); margin-top: 16px; line-height: 1.5;
   }
   .journal-item {
-    background: var(--bg-0);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius-md);
-    padding: 13px 15px;
-    margin-bottom: 8px;
+    background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 13px 15px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
   }
-  .journal-item .name { font-weight: 700; font-size: 14.5px; }
-  .journal-item .reason { color: var(--text-dim); font-size: 13px; margin-top: 3px; line-height: 1.4; }
-  .journal-item .meta-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-  .tag {
-    display: inline-block;
-    font-size: 11px; font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 100px;
-    background: var(--primary-soft);
-    color: #c3baff;
-  }
-  .tag.outcome-completed { background: var(--green-soft); color: #7ce8bb; }
-  .tag.outcome-abandoned { background: var(--red-soft); color: #ff9d9d; }
-  .days-held { font-size: 11.5px; color: var(--text-faint); }
-  .remove-x { float: right; cursor: pointer; color: var(--text-faint); font-size: 13px; }
+  .journal-item .info { min-width: 0; }
+  .journal-item .name { font-weight: 700; font-size: 14px; }
+  .journal-item .meta-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+  .tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
+  .tag.outcome-completed { background: var(--green-soft); color: #0f9463; }
+  .days-held { font-size: 11px; color: var(--text-faint); font-weight: 600; }
+  .remove-x { cursor: pointer; color: var(--text-faint); font-size: 15px; flex-shrink: 0; padding: 4px; }
   .remove-x:hover { color: var(--red); }
-  .choice-grid { display: grid; gap: 8px; margin-top: 10px; }
-  .choice-btn {
-    text-align: left;
-    background: var(--bg-0);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius-md);
-    padding: 13px 15px;
-    color: var(--text);
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: border-color 0.15s, background 0.15s;
-  }
-  .choice-btn:hover { border-color: var(--primary); background: var(--primary-soft); }
   .insight-box {
-    background: var(--amber-soft);
-    border: 1px solid #f0a84845;
-    border-radius: var(--radius-md);
-    padding: 15px 16px;
-    font-size: 14px;
-    margin-top: 18px;
-    line-height: 1.55;
-    color: #f5d9ac;
+    background: var(--amber-soft); border: 1px solid #f59e0b35; border-radius: var(--radius-md);
+    padding: 14px 16px; font-size: 13.5px; margin-top: 16px; line-height: 1.5; color: #92620a;
   }
-  .insight-box b { color: var(--amber); }
-  .pattern-card { display: flex; gap: 14px; margin-top: 6px; }
-  .pattern-stat { flex: 1; background: var(--bg-0); border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 14px; text-align: center; }
-  .pattern-stat .num { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 800; color: var(--primary); }
-  .pattern-stat .lbl { font-size: 11.5px; color: var(--text-faint); margin-top: 4px; line-height: 1.3; }
-  .center { text-align: center; }
-  .footer-link { text-align: center; display: block; color: var(--text-faint); font-size: 12px; margin-top: 20px; text-decoration: none; opacity: 0.7; }
-  .footer-link:hover { opacity: 1; }
-  .step-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; }
-  .step-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--card-border); transition: all 0.2s; }
-  .step-dots span.active { background: var(--primary); width: 20px; border-radius: 100px; }
-  .value-list { list-style: none; padding: 0; margin: 20px 0; display: flex; flex-direction: column; gap: 12px; }
-  .value-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--text-dim); line-height: 1.4; }
-  .value-list .ico { font-size: 18px; line-height: 1.2; }
-  .personal-note {
-    background: linear-gradient(135deg, #7c6dfc12, #4f46e512);
-    border: 1px solid #7c6dfc35;
-    border-radius: var(--radius-md);
-    padding: 14px 16px;
-    font-size: 13.5px;
-    color: #c3baff;
-    line-height: 1.5;
-    margin: 18px 0 4px;
-  }
+  .insight-box b { color: #7a4e07; }
+  .pattern-grid { display: flex; gap: 12px; margin-top: 4px; }
+  .pattern-stat { flex: 1; background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; text-align: center; }
+  .pattern-stat .num { font-family: 'Sora', sans-serif; font-size: 21px; font-weight: 800; color: var(--primary); }
+  .pattern-stat .lbl { font-size: 11px; color: var(--text-faint); margin-top: 3px; font-weight: 600; line-height: 1.3; }
+  .footer-link { text-align: center; display: block; color: var(--text-faint); font-size: 12px; margin-top: 18px; text-decoration: none; }
+  .footer-link:hover { color: var(--text-dim); }
+  .value-list { list-style: none; padding: 0; margin: 18px 0; display: flex; flex-direction: column; gap: 11px; }
+  .value-list li { display: flex; gap: 10px; align-items: center; font-size: 13.5px; color: var(--text); font-weight: 600; }
+  .value-list .ico { font-size: 18px; width: 26px; text-align: center; flex-shrink: 0; }
   .badge-mvp {
-    display: inline-block;
-    font-size: 11px; font-weight: 700;
-    letter-spacing: 0.5px;
-    padding: 4px 10px;
-    border-radius: 100px;
-    background: var(--amber-soft);
-    color: var(--amber);
-    margin-bottom: 16px;
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.4px;
+    padding: 4px 11px; border-radius: 100px; background: var(--amber-soft); color: #92620a; margin-bottom: 14px;
   }
-  .completion-banner {
-    background: linear-gradient(135deg, var(--green-soft), transparent);
-    border: 1px solid #45d18f45;
-    border-radius: var(--radius-md);
-    padding: 18px;
-    margin-top: 14px;
-    text-align: center;
+  .personal-note {
+    background: var(--primary-soft); border: 1px solid #6d5efc30; border-radius: var(--radius-md);
+    padding: 13px 15px; font-size: 13px; color: var(--primary-dark); line-height: 1.5; margin: 16px 0 4px;
   }
-  .completion-banner .emoji { font-size: 30px; margin-bottom: 6px; }
-  .completion-banner h3 { margin: 0 0 6px; font-size: 16px; color: #7ce8bb; }
-  .completion-banner p { margin: 0; font-size: 13px; color: var(--text-dim); }
-  .global-footer { color: var(--text-faint); font-size: 11.5px; text-align: center; margin-top: 24px; opacity: 0.6; }
+  .completion-banner { background: var(--green-soft); border: 1px solid #16b57945; border-radius: var(--radius-md); padding: 18px; margin-top: 14px; text-align: center; }
+  .completion-banner .emoji { font-size: 28px; margin-bottom: 4px; }
+  .completion-banner h3 { font-size: 15.5px; color: #0f9463; margin-bottom: 4px; }
+  .completion-banner p { margin: 0; font-size: 12.5px; color: var(--text-dim); }
+  .global-footer { color: var(--text-faint); font-size: 11px; text-align: center; margin-top: 20px; }
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="brand">
-    <div class="brand-mark">D2</div>
-    <div class="brand-name">Day<span>2</span></div>
-  </div>
+  <div class="brand"><div class="brand-mark">D2</div><div class="brand-name">Day<span>2</span></div></div>
   <div class="tagline">Le jour où la motivation retombe — et où tu tiens quand même.</div>
   <div id="root"></div>
 </div>
-<div class="global-footer">Day 2 · MVP v0.1 — construit en direct, testé en vrai</div>
+<div class="global-footer">Day 2 · MVP v0.2</div>
 
 <script>
-const STORAGE_KEY = "day2_state_v2";
+const STORAGE_KEY = "day2_state_v3";
 
 function loadState() {
   const raw = localStorage.getItem(STORAGE_KEY);
@@ -284,29 +209,92 @@ function loadState() {
   };
 }
 function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); render(); }
-
 let state = loadState();
 
-const REASON_CATEGORIES = [
-  { key: "Manque de résultats rapides", icon: "📉" },
-  { key: "Difficulté commerciale (prospection, vente)", icon: "🤝" },
-  { key: "Lassitude / routine qui s'installe", icon: "😴" },
-  { key: "Doute sur le marché / perte de sens", icon: "🌀" },
-  { key: "Avis extérieur / autre priorité", icon: "👥" },
-  { key: "Autre", icon: "✳️" }
+const REASONS = [
+  { key: "resultats", label: "Pas de résultats", icon: "📉", bg: "#e8f1ff", fg: "#2563eb" },
+  { key: "commercial", label: "Trop dur à vendre", icon: "🤝", bg: "#fff1e6", fg: "#ea580c" },
+  { key: "lassitude", label: "Lassitude", icon: "😴", bg: "#f3e8ff", fg: "#9333ea" },
+  { key: "doute", label: "Doute / sens", icon: "🌀", bg: "#e6fbf7", fg: "#0d9488" },
+  { key: "externe", label: "Avis extérieur", icon: "👥", bg: "#ffe8f3", fg: "#db2777" },
+  { key: "autre", label: "Autre", icon: "✳️", bg: "#f1f0f4", fg: "#64748b" }
 ];
-function iconFor(reasonKey) {
-  const r = REASON_CATEGORIES.find(r => r.key === reasonKey);
-  return r ? r.icon : "✳️";
+const DURATION_BUCKETS = [
+  { value: "unknown", label: "Je sais plus", icon: "🤷", days: null },
+  { value: "lt1w", label: "< 1 semaine", icon: "⚡", days: 5 },
+  { value: "1to4w", label: "1-4 semaines", icon: "📅", days: 15 },
+  { value: "1to3m", label: "1-3 mois", icon: "🌙", days: 60 },
+  { value: "3to6m", label: "3-6 mois", icon: "☀️", days: 135 },
+  { value: "gt6m", label: "6 mois +", icon: "🏔️", days: 200 }
+];
+const ENGAGEMENT_DURATIONS = [
+  { value: 30, label: "1 mois" }, { value: 60, label: "2 mois" },
+  { value: 90, label: "3 mois" }, { value: 180, label: "6 mois" }
+];
+const MOTIVATIONS = [
+  { value: "argent", label: "Argent", icon: "💰" },
+  { value: "sens", label: "Sens", icon: "🧠" },
+  { value: "impact", label: "Impact", icon: "🚀" },
+  { value: "reconnaissance", label: "Reconnaissance", icon: "🏆" },
+  { value: "liberte", label: "Liberté", icon: "🕊️" },
+  { value: "passion", label: "Passion", icon: "🔥" }
+];
+
+function reasonMeta(key) { return REASONS.find(r => r.key === key) || REASONS[REASONS.length - 1]; }
+function bucketMeta(value) { return DURATION_BUCKETS.find(b => b.value === value); }
+function daysBetween(a, b) { return Math.floor((b - a) / (1000 * 60 * 60 * 24)); }
+function el(html) { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstChild; }
+
+function stepTrack(label, current, total) {
+  let dots = '';
+  for (let i = 0; i < total; i++) dots += `<span class="${i === current - 1 ? 'active' : ''}"></span>`;
+  return `<div class="step-track"><span class="label">${label}</span><div class="step-dots">${dots}</div></div>`;
 }
 
-function daysBetween(a, b) { return Math.floor((b - a) / (1000 * 60 * 60 * 24)); }
-function el(html) { const div = document.createElement('div'); div.innerHTML = html.trim(); return div.firstChild; }
+// Reusable single-choice chip group. Returns {container, get, set}
+function buildSingleChoice(items, initial, colored) {
+  let value = initial;
+  const container = el(`<div class="chip-group"></div>`);
+  function paint() {
+    container.innerHTML = '';
+    items.forEach(it => {
+      const key = it.key || it.value;
+      const chip = el(`<button type="button" class="chip ${key === value ? 'selected' : ''}"><span class="ic">${it.icon || ''}</span><span>${it.label}</span></button>`);
+      if (colored && it.bg) { chip.style.setProperty('--chip-bg', it.bg); chip.style.setProperty('--chip-fg', it.fg); }
+      chip.onclick = () => { value = key; paint(); };
+      container.appendChild(chip);
+    });
+  }
+  paint();
+  return { container, get: () => value };
+}
+// Reusable multi-choice chip group.
+function buildMultiChoice(items, initial) {
+  const set = new Set(initial || []);
+  const container = el(`<div class="chip-group"></div>`);
+  function paint() {
+    container.innerHTML = '';
+    items.forEach(it => {
+      const chip = el(`<button type="button" class="chip ${set.has(it.value) ? 'selected' : ''}"><span class="ic">${it.icon}</span><span>${it.label}</span></button>`);
+      chip.onclick = () => { set.has(it.value) ? set.delete(it.value) : set.add(it.value); paint(); };
+      container.appendChild(chip);
+    });
+  }
+  paint();
+  return { container, get: () => Array.from(set) };
+}
+
+function formatHeld(record) {
+  if (record.daysHeldBucket) {
+    const b = bucketMeta(record.daysHeldBucket);
+    return b && b.value !== 'unknown' ? b.label : null;
+  }
+  if (typeof record.daysHeldEstimate === 'number') return record.daysHeldEstimate + 'j';
+  return null;
+}
 
 function getAllAbandonRecords() {
-  const fromJournal = state.pastAbandons.map(a => ({ ...a }));
-  const fromHistory = (state.history || []).filter(h => h.outcome === 'abandoned');
-  return [...fromJournal, ...fromHistory];
+  return [...state.pastAbandons, ...(state.history || []).filter(h => h.outcome === 'abandoned')];
 }
 function computePatternInsight() {
   const records = getAllAbandonRecords();
@@ -315,74 +303,73 @@ function computePatternInsight() {
   records.forEach(r => counts[r.reasonCategory] = (counts[r.reasonCategory] || 0) + 1);
   let topReason = null, topCount = 0;
   Object.entries(counts).forEach(([k, v]) => { if (v > topCount) { topCount = v; topReason = k; } });
-  const withDays = records.filter(r => typeof r.daysHeld === 'number' && !isNaN(r.daysHeld));
-  const avgDays = withDays.length ? Math.round(withDays.reduce((s, r) => s + r.daysHeld, 0) / withDays.length) : null;
+  const withDays = records.filter(r => typeof r.daysHeldEstimate === 'number');
+  const avgDays = withDays.length ? Math.round(withDays.reduce((s, r) => s + r.daysHeldEstimate, 0) / withDays.length) : null;
   return { total: records.length, topReason, topCount, avgDays };
 }
 
 // ---------- LANDING ----------
 function renderLanding() {
-  const root = document.getElementById('root');
-  root.innerHTML = '';
+  const root = document.getElementById('root'); root.innerHTML = '';
   const card = el(`
     <div class="card">
       <span class="badge-mvp">MVP · TEST EN COURS</span>
       <h1 class="title">Ne lâche plus au jour 2.</h1>
-      <p class="lead">La plupart des projets solo meurent quelques semaines après le lancement — pas parce que l'idée est mauvaise, mais parce que la nouveauté s'estompe et qu'aucun résultat n'est encore là.</p>
-      <p class="lead" style="margin-top:10px">Day 2 te fait garder un œil sur ton propre pattern d'abandon, pour que tu puisses le voir venir — et choisir consciemment au lieu de switcher par réflexe.</p>
+      <p class="lead">Reste sur une idée, plus longtemps que d'habitude.</p>
       <ul class="value-list">
-        <li><span class="ico">📓</span><span><b>Ton journal des abandons</b> — un miroir de tes projets passés et des vraies raisons.</span></li>
-        <li><span class="ico">🎯</span><span><b>Un engagement clair</b> — une idée, une durée, une raison, toujours visible.</span></li>
-        <li><span class="ico">🛑</span><span><b>Une friction douce anti-pivot</b> — avant de tout lâcher, ton historique te le rappelle.</span></li>
+        <li><span class="ico">📓</span>Ton historique d'abandons</li>
+        <li><span class="ico">🎯</span>Un engagement clair et daté</li>
+        <li><span class="ico">🛑</span>Une pause avant de tout lâcher</li>
       </ul>
-      <div class="personal-note">Je construis cet outil parce que je vis ce pattern moi-même depuis des années. Ce n'est pas de la théorie — c'est ce que j'aurais aimé avoir.</div>
-      <button class="btn" id="start-btn">Commencer mon suivi →</button>
+      <div class="personal-note">Je vis ce pattern moi-même. Cet outil, c'est celui que j'aurais aimé avoir.</div>
+      <button class="btn" id="start-btn">Commencer →</button>
     </div>
   `);
   root.appendChild(card);
   card.querySelector('#start-btn').onclick = () => { state.seenLanding = true; saveState(state); };
 }
 
-// ---------- ONBOARDING STEP 1 : journal des abandons passés ----------
+// ---------- ONBOARDING STEP 1 : journal ----------
 function renderOnboardingJournal() {
-  const root = document.getElementById('root');
-  root.innerHTML = '';
+  const root = document.getElementById('root'); root.innerHTML = '';
   const abandons = state.pastAbandons;
-
   const card = el(`
     <div class="card">
-      <div class="step-dots"><span class="active"></span><span></span></div>
-      <h1 class="title">Avant de commencer</h1>
-      <p class="lead">Liste 2-3 projets que t'as laissés tomber, et la vraie raison. Pas pour te juger — pour avoir un miroir la prochaine fois que t'as envie de tout arrêter.</p>
-      <div id="abandon-list" style="margin-top:16px"></div>
-      <label>Nom du projet abandonné</label>
-      <input type="text" id="ab-name" placeholder="Ex: SaaS paysagiste">
-      <label>Vraie raison</label>
-      <select id="ab-reason">${REASON_CATEGORIES.map(r => `<option value="${r.key}">${r.icon} ${r.key}</option>`).join('')}</select>
-      <label>Combien de temps environ as-tu tenu ? (jours, optionnel)</label>
-      <input type="number" id="ab-days" placeholder="Ex: 21" min="0">
-      <label>Détail (optionnel)</label>
-      <textarea id="ab-detail" rows="2" placeholder="Un mot de plus si tu veux..."></textarea>
+      ${stepTrack('Étape 1 / 2', 1, 2)}
+      <h1 class="title">Tes abandons passés</h1>
+      <p class="lead">2-3 projets lâchés, la vraie raison à chaque fois.</p>
+      <div id="abandon-list" style="margin-top:14px"></div>
+      <div class="field">
+        <span class="field-label">Nom du projet</span>
+        <input type="text" id="ab-name" placeholder="Ex: SaaS paysagiste">
+      </div>
+      <div class="field"><span class="field-label">Pourquoi tu as arrêté ?</span><div id="ab-reason-slot"></div></div>
+      <div class="field"><span class="field-label">Combien de temps tenu ?</span><div id="ab-duration-slot"></div></div>
       <button class="btn secondary" id="add-abandon">+ Ajouter à la liste</button>
-      <button class="btn" id="continue-onboarding" ${abandons.length === 0 ? 'style="opacity:0.5"' : ''}>
-        Continuer ${abandons.length > 0 ? '(' + abandons.length + ' noté' + (abandons.length > 1 ? 's' : '') + ')' : ''}
+      <button class="btn" id="continue-onboarding" ${abandons.length === 0 ? 'disabled' : ''}>
+        Continuer ${abandons.length > 0 ? '(' + abandons.length + ')' : ''}
       </button>
       ${abandons.length === 0 ? '<button class="btn ghost" id="skip-onboarding">Passer cette étape</button>' : ''}
     </div>
   `);
   root.appendChild(card);
 
+  const reasonChoice = buildSingleChoice(REASONS, REASONS[0].key, true);
+  card.querySelector('#ab-reason-slot').appendChild(reasonChoice.container);
+  const durationChoice = buildSingleChoice(DURATION_BUCKETS, 'unknown', false);
+  card.querySelector('#ab-duration-slot').appendChild(durationChoice.container);
+
   const list = card.querySelector('#abandon-list');
   abandons.forEach(a => {
+    const rm = reasonMeta(a.reasonCategory);
+    const held = formatHeld(a);
     list.appendChild(el(`
       <div class="journal-item">
-        <span class="remove-x" data-id="${a.id}">✕</span>
-        <div class="name">${a.name}</div>
-        <div class="reason">${a.reasonDetail || ''}</div>
-        <div class="meta-row">
-          <span class="tag">${iconFor(a.reasonCategory)} ${a.reasonCategory}</span>
-          ${typeof a.daysHeld === 'number' ? `<span class="days-held">tenu ${a.daysHeld}j</span>` : ''}
+        <div class="info">
+          <div class="name">${a.name}</div>
+          <div class="meta-row"><span class="tag" style="background:${rm.bg};color:${rm.fg}">${rm.icon} ${rm.label}</span>${held ? `<span class="days-held">${held}</span>` : ''}</div>
         </div>
+        <span class="remove-x" data-id="${a.id}">✕</span>
       </div>
     `));
   });
@@ -393,13 +380,13 @@ function renderOnboardingJournal() {
   card.querySelector('#add-abandon').onclick = () => {
     const name = card.querySelector('#ab-name').value.trim();
     if (!name) return;
-    const daysVal = card.querySelector('#ab-days').value;
+    const bucket = durationChoice.get();
+    const bm = bucketMeta(bucket);
     state.pastAbandons.push({
-      id: crypto.randomUUID(),
-      name,
-      reasonCategory: card.querySelector('#ab-reason').value,
-      reasonDetail: card.querySelector('#ab-detail').value.trim(),
-      daysHeld: daysVal !== '' ? parseInt(daysVal, 10) : null,
+      id: crypto.randomUUID(), name,
+      reasonCategory: reasonChoice.get(),
+      daysHeldBucket: bucket,
+      daysHeldEstimate: bm ? bm.days : null,
       date: new Date().toISOString()
     });
     saveState(state);
@@ -410,38 +397,37 @@ function renderOnboardingJournal() {
   if (skipBtn) skipBtn.onclick = goNext;
 }
 
-// ---------- ONBOARDING STEP 2 : déclaration d'engagement ----------
+// ---------- ONBOARDING STEP 2 : engagement ----------
 function renderOnboardingEngagement() {
-  const root = document.getElementById('root');
-  root.innerHTML = '';
+  const root = document.getElementById('root'); root.innerHTML = '';
   const isFirstTime = !state.onboarded;
   const card = el(`
     <div class="card">
-      ${isFirstTime ? '<div class="step-dots"><span></span><span class="active"></span></div>' : ''}
-      <h1 class="title">${isFirstTime ? 'Ton engagement actuel' : 'Nouvel engagement'}</h1>
-      <p class="lead">Une seule idée. Une durée fixée. Une vraie raison. C'est ce qu'on va te remontrer chaque fois que t'as envie de switcher.</p>
-      <label>Ton idée / projet en cours</label>
-      <input type="text" id="eng-name" placeholder="Ex: Day 2 — l'app anti-pivot">
-      <label>Pourquoi cette idée précisément ?</label>
-      <textarea id="eng-why" rows="3" placeholder="Ce qui te motive vraiment sur ce projet, là, maintenant..."></textarea>
-      <label>Tu t'engages pour combien de temps avant de te permettre de remettre en cause ?</label>
-      <select id="eng-duration">
-        <option value="30">30 jours</option>
-        <option value="60">60 jours</option>
-        <option value="90" selected>90 jours</option>
-        <option value="180">180 jours</option>
-      </select>
+      ${isFirstTime ? stepTrack('Étape 2 / 2', 2, 2) : ''}
+      <h1 class="title">${isFirstTime ? 'Ton engagement' : 'Nouvel engagement'}</h1>
+      <p class="lead">Une idée. Un cap. Une durée.</p>
+      <div class="field"><span class="field-label">Ton idée</span><input type="text" id="eng-name" placeholder="Ex: Day 2"></div>
+      <div class="field"><span class="field-label">Ce qui te motive</span><div id="eng-motiv-slot"></div></div>
+      <div class="field"><span class="field-label">En une phrase, pourquoi ? (optionnel)</span><input type="text" id="eng-why" placeholder="Ex: Aider les solopreneurs à tenir"></div>
+      <div class="field"><span class="field-label">Pendant combien de temps ?</span><div id="eng-duration-slot"></div></div>
       <button class="btn" id="lock-engagement">Verrouiller mon engagement</button>
     </div>
   `);
   root.appendChild(card);
+  const motivChoice = buildMultiChoice(MOTIVATIONS, []);
+  card.querySelector('#eng-motiv-slot').appendChild(motivChoice.container);
+  const durationChoice = buildSingleChoice(ENGAGEMENT_DURATIONS, 90, false);
+  card.querySelector('#eng-duration-slot').appendChild(durationChoice.container);
+
   card.querySelector('#lock-engagement').onclick = () => {
     const name = card.querySelector('#eng-name').value.trim();
-    const why = card.querySelector('#eng-why').value.trim();
-    if (!name || !why) { alert("Remplis le nom et le pourquoi — c'est ça qui te retiendra plus tard."); return; }
+    const motivations = motivChoice.get();
+    if (!name) { alert("Donne un nom à ton idée."); return; }
+    if (motivations.length === 0) { alert("Choisis au moins une motivation — ça te servira plus tard."); return; }
     state.currentEngagement = {
-      name, why,
-      durationDays: parseInt(card.querySelector('#eng-duration').value, 10),
+      name, motivations,
+      whyShort: card.querySelector('#eng-why').value.trim(),
+      durationDays: durationChoice.get(),
       startDate: new Date().toISOString()
     };
     state.onboarded = true;
@@ -452,8 +438,7 @@ function renderOnboardingEngagement() {
 
 // ---------- DASHBOARD ----------
 function renderDashboard() {
-  const root = document.getElementById('root');
-  root.innerHTML = '';
+  const root = document.getElementById('root'); root.innerHTML = '';
   const eng = state.currentEngagement;
   const start = new Date(eng.startDate);
   const today = new Date();
@@ -461,6 +446,8 @@ function renderDashboard() {
   const pct = Math.min(100, Math.round((dayNum / eng.durationDays) * 100));
   const remaining = Math.max(0, eng.durationDays - dayNum);
   const isComplete = dayNum >= eng.durationDays;
+  const motivIcons = (eng.motivations || []).map(m => (MOTIVATIONS.find(x => x.value === m) || {}).icon || '').join(' ');
+  const whyLine = [motivIcons, eng.whyShort].filter(Boolean).join(' — ');
 
   const card = el(`
     <div class="card">
@@ -468,83 +455,76 @@ function renderDashboard() {
       <h1 class="title">${eng.name}</h1>
       <div class="progress-wrap">
         <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-        <div class="progress-label"><span>${pct}% du parcours</span><span>${remaining} jours restants</span></div>
+        <div class="progress-label"><span>${pct}%</span><span>${remaining}j restants</span></div>
       </div>
-      <div class="why-box">« ${eng.why} »</div>
+      ${whyLine ? `<div class="why-box">${whyLine}</div>` : ''}
       ${isComplete ? `
         <div class="completion-banner">
           <div class="emoji">🎉</div>
-          <h3>Tu as tenu tout ton engagement !</h3>
-          <p>${eng.durationDays} jours sur "${eng.name}" — c'est déjà plus loin que beaucoup de tes projets passés. À toi de décider la suite.</p>
+          <h3>Engagement tenu !</h3>
+          <p>${eng.durationDays} jours sur "${eng.name}". À toi la suite.</p>
         </div>
-        <button class="btn green" id="extend-engagement">Prolonger de ${eng.durationDays} jours de plus</button>
-        <button class="btn secondary" id="new-after-complete">Nouveau projet (celui-ci est un succès)</button>
-      ` : `
-        <button class="btn amber" id="want-pivot">😬 J'ai envie de tout changer</button>
-      `}
+        <button class="btn green" id="extend-engagement">Prolonger de ${eng.durationDays}j</button>
+        <button class="btn secondary" id="new-after-complete">Nouveau projet</button>
+      ` : `<button class="btn amber" id="want-pivot">😬 Envie de tout changer</button>`}
     </div>
   `);
   root.appendChild(card);
 
   const wantPivot = card.querySelector('#want-pivot');
   if (wantPivot) wantPivot.onclick = () => { state.pivotDraft = { step: 1 }; saveState(state); };
-
   const extendBtn = card.querySelector('#extend-engagement');
   if (extendBtn) extendBtn.onclick = () => {
-    state.history.push({ id: crypto.randomUUID(), name: eng.name, why: eng.why, outcome: 'completed', daysHeld: eng.durationDays, date: new Date().toISOString() });
+    state.history.push({ id: crypto.randomUUID(), name: eng.name, outcome: 'completed', daysHeldEstimate: eng.durationDays, date: new Date().toISOString() });
     state.currentEngagement.startDate = new Date().toISOString();
     saveState(state);
   };
   const newAfterBtn = card.querySelector('#new-after-complete');
   if (newAfterBtn) newAfterBtn.onclick = () => {
-    state.history.push({ id: crypto.randomUUID(), name: eng.name, why: eng.why, outcome: 'completed', daysHeld: eng.durationDays, date: new Date().toISOString() });
+    state.history.push({ id: crypto.randomUUID(), name: eng.name, outcome: 'completed', daysHeldEstimate: eng.durationDays, date: new Date().toISOString() });
     state.currentEngagement = null;
     saveState(state);
   };
 
-  // Pattern insight card
   const insight = computePatternInsight();
   if (insight) {
+    const rm = reasonMeta(insight.topReason);
     const patternCard = el(`
       <div class="card">
         <h2 class="subtitle">🔍 Ton pattern</h2>
-        <div class="pattern-card">
-          <div class="pattern-stat"><div class="num">${insight.total}</div><div class="lbl">projet${insight.total > 1 ? 's' : ''} abandonné${insight.total > 1 ? 's' : ''}</div></div>
+        <div class="pattern-grid">
+          <div class="pattern-stat"><div class="num">${insight.total}</div><div class="lbl">abandon${insight.total > 1 ? 's' : ''}</div></div>
           <div class="pattern-stat"><div class="num">${insight.avgDays !== null ? insight.avgDays + 'j' : '—'}</div><div class="lbl">tenu en moyenne</div></div>
         </div>
-        <p class="lead" style="margin-top:14px">Raison la plus fréquente : <b style="color:var(--text)">${iconFor(insight.topReason)} ${insight.topReason}</b> (${insight.topCount}×)</p>
+        <p class="lead" style="margin-top:12px">Raison n°1 : <b style="color:var(--text)">${rm.icon} ${rm.label}</b> (${insight.topCount}×)</p>
       </div>
     `);
     root.appendChild(patternCard);
   }
 
-  // Journal + history
   const journalCard = el(`
     <div class="card">
       <h2 class="subtitle">📓 Ton journal (${state.pastAbandons.length + (state.history || []).length})</h2>
-      <div id="journal-list"></div>
-      <button class="btn ghost" id="add-past">+ Ajouter un projet abandonné passé</button>
+      <div id="journal-list" style="margin-top:12px"></div>
+      <button class="btn ghost" id="add-past">+ Ajouter un abandon passé</button>
     </div>
   `);
   root.appendChild(journalCard);
   const jlist = journalCard.querySelector('#journal-list');
-  const combined = [
-    ...state.pastAbandons.map(a => ({ ...a, outcome: 'abandoned' })),
-    ...(state.history || [])
-  ].sort((a, b) => new Date(b.date) - new Date(a.date));
-  if (combined.length === 0) {
-    jlist.appendChild(el(`<p class="lead" style="margin:0">Rien pour l'instant.</p>`));
-  }
+  const combined = [...state.pastAbandons.map(a => ({ ...a, outcome: 'abandoned' })), ...(state.history || [])]
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+  if (combined.length === 0) jlist.appendChild(el(`<p class="lead" style="margin:0">Rien pour l'instant.</p>`));
   combined.forEach(a => {
+    const held = formatHeld(a);
+    const rm = a.outcome === 'abandoned' ? reasonMeta(a.reasonCategory) : null;
     jlist.appendChild(el(`
       <div class="journal-item">
-        <div class="name">${a.name}</div>
-        <div class="reason">${a.reasonDetail || a.why || ''}</div>
-        <div class="meta-row">
-          ${a.outcome === 'completed'
-            ? `<span class="tag outcome-completed">✅ réussi</span>`
-            : `<span class="tag outcome-abandoned">${iconFor(a.reasonCategory)} ${a.reasonCategory}</span>`}
-          ${typeof a.daysHeld === 'number' ? `<span class="days-held">tenu ${a.daysHeld}j</span>` : ''}
+        <div class="info">
+          <div class="name">${a.name}</div>
+          <div class="meta-row">
+            ${a.outcome === 'completed' ? `<span class="tag outcome-completed">✅ réussi</span>` : `<span class="tag" style="background:${rm.bg};color:${rm.fg}">${rm.icon} ${rm.label}</span>`}
+            ${held ? `<span class="days-held">${held}</span>` : ''}
+          </div>
         </div>
       </div>
     `));
@@ -559,33 +539,33 @@ function renderDashboard() {
 }
 
 function renderAddPastFromDashboard() {
-  const root = document.getElementById('root');
-  root.innerHTML = '';
+  const root = document.getElementById('root'); root.innerHTML = '';
   const card = el(`
     <div class="card">
-      <h2 class="subtitle">Ajouter un projet abandonné</h2>
-      <label>Nom du projet</label>
-      <input type="text" id="ab-name">
-      <label>Vraie raison</label>
-      <select id="ab-reason">${REASON_CATEGORIES.map(r => `<option value="${r.key}">${r.icon} ${r.key}</option>`).join('')}</select>
-      <label>Combien de temps environ as-tu tenu ? (jours, optionnel)</label>
-      <input type="number" id="ab-days" min="0">
-      <label>Détail (optionnel)</label>
-      <textarea id="ab-detail" rows="2"></textarea>
+      <h2 class="subtitle">Ajouter un abandon</h2>
+      <div class="field"><span class="field-label">Nom du projet</span><input type="text" id="ab-name"></div>
+      <div class="field"><span class="field-label">Pourquoi tu as arrêté ?</span><div id="ab-reason-slot"></div></div>
+      <div class="field"><span class="field-label">Combien de temps tenu ?</span><div id="ab-duration-slot"></div></div>
       <button class="btn" id="save-ab">Enregistrer</button>
       <button class="btn secondary" id="cancel-ab">Annuler</button>
     </div>
   `);
   root.appendChild(card);
+  const reasonChoice = buildSingleChoice(REASONS, REASONS[0].key, true);
+  card.querySelector('#ab-reason-slot').appendChild(reasonChoice.container);
+  const durationChoice = buildSingleChoice(DURATION_BUCKETS, 'unknown', false);
+  card.querySelector('#ab-duration-slot').appendChild(durationChoice.container);
+
   card.querySelector('#save-ab').onclick = () => {
     const name = card.querySelector('#ab-name').value.trim();
     if (!name) return;
-    const daysVal = card.querySelector('#ab-days').value;
+    const bucket = durationChoice.get();
+    const bm = bucketMeta(bucket);
     state.pastAbandons.push({
       id: crypto.randomUUID(), name,
-      reasonCategory: card.querySelector('#ab-reason').value,
-      reasonDetail: card.querySelector('#ab-detail').value.trim(),
-      daysHeld: daysVal !== '' ? parseInt(daysVal, 10) : null,
+      reasonCategory: reasonChoice.get(),
+      daysHeldBucket: bucket,
+      daysHeldEstimate: bm ? bm.days : null,
       date: new Date().toISOString()
     });
     state.addingPast = false;
@@ -596,23 +576,23 @@ function renderAddPastFromDashboard() {
 
 // ---------- ANTI-PIVOT FLOW ----------
 function renderPivotFlow() {
-  const root = document.getElementById('root');
-  root.innerHTML = '';
+  const root = document.getElementById('root'); root.innerHTML = '';
   const step = state.pivotDraft.step;
 
   if (step === 1) {
     const card = el(`
       <div class="card">
+        ${stepTrack('Étape 1 / 4', 1, 4)}
         <h1 class="title">Ok, respire.</h1>
-        <p class="lead">Avant de faire quoi que ce soit — qu'est-ce qui se passe là, concrètement ?</p>
-        <div class="choice-grid" id="reason-choices">
-          ${REASON_CATEGORIES.map(r => `<button class="choice-btn" data-r="${r.key}">${r.icon} ${r.key}</button>`).join('')}
-        </div>
+        <p class="lead">Qu'est-ce qui se passe, concrètement ?</p>
+        <div id="reason-slot" style="margin-top:6px"></div>
       </div>
     `);
     root.appendChild(card);
-    card.querySelectorAll('.choice-btn').forEach(b => {
-      b.onclick = () => { state.pivotDraft.reason = b.dataset.r; state.pivotDraft.step = 2; saveState(state); };
+    const choice = buildSingleChoice(REASONS, null, true);
+    card.querySelector('#reason-slot').appendChild(choice.container);
+    choice.container.querySelectorAll('.chip').forEach((chip, i) => {
+      chip.addEventListener('click', () => { state.pivotDraft.reason = REASONS[i].key; state.pivotDraft.step = 2; saveState(state); });
     });
     return;
   }
@@ -625,39 +605,36 @@ function renderPivotFlow() {
     const insightData = computePatternInsight();
     const eng = state.currentEngagement;
     const currentDayNum = eng ? Math.max(1, daysBetween(new Date(eng.startDate), new Date()) + 1) : null;
+    const rm = reasonMeta(reason);
 
     let insight = '';
-    if (sameReasonCount > 0) {
-      insight = `C'est déjà arrivé <b>${sameReasonCount} fois</b> pour la même raison ("${reason}"). Ça commence à ressembler à un pattern, pas à un signal isolé.`;
-    } else if (totalAbandons > 0) {
-      insight = `T'as déjà abandonné <b>${totalAbandons} projet${totalAbandons > 1 ? 's' : ''}</b> par le passé. Nouvelle raison cette fois — mais même résultat si tu switches : encore un projet qui ne va pas au bout.`;
-    } else {
-      insight = `Tu n'as pas encore de projet abandonné dans ton journal — ce serait le premier. Prends 2 minutes avant de trancher.`;
-    }
+    if (sameReasonCount > 0) insight = `${sameReasonCount}ᵉ fois pour "${rm.label}". Ça ressemble à un pattern.`;
+    else if (totalAbandons > 0) insight = `Déjà ${totalAbandons} abandon${totalAbandons > 1 ? 's' : ''} avant celui-ci.`;
+    else insight = `Ce serait ton premier abandon noté. Prends 2 min avant de trancher.`;
     if (insightData && insightData.avgDays !== null && currentDayNum !== null) {
-      insight += ` Pour comparaison : tu es à <b>${currentDayNum}j</b> sur ce projet, ta moyenne passée avant d'abandonner est de <b>${insightData.avgDays}j</b>.`;
+      insight += ` Tu es à <b>${currentDayNum}j</b> ici, ta moyenne passée est <b>${insightData.avgDays}j</b>.`;
     }
 
     const card = el(`
       <div class="card">
+        ${stepTrack('Étape 2 / 4', 2, 4)}
         <h2 class="subtitle">📓 Ton miroir</h2>
-        <div id="mirror-list"></div>
+        <div id="mirror-list" style="margin-top:10px"></div>
         <div class="insight-box">${insight}</div>
-        <button class="btn" id="mirror-continue">J'ai regardé, je continue à réfléchir →</button>
+        <button class="btn" id="mirror-continue">Continuer →</button>
       </div>
     `);
     root.appendChild(card);
     const mlist = card.querySelector('#mirror-list');
-    if (records.length === 0) {
-      mlist.appendChild(el(`<p class="lead" style="margin:0 0 4px">Ton journal est vide pour l'instant.</p>`));
-    }
+    if (records.length === 0) mlist.appendChild(el(`<p class="lead" style="margin:0 0 4px">Ton journal est vide.</p>`));
     records.forEach(a => {
+      const m = reasonMeta(a.reasonCategory);
+      const held = formatHeld(a);
       mlist.appendChild(el(`
         <div class="journal-item">
-          <div class="name">${a.name}</div>
-          <div class="meta-row">
-            <span class="tag">${iconFor(a.reasonCategory)} ${a.reasonCategory}</span>
-            ${typeof a.daysHeld === 'number' ? `<span class="days-held">tenu ${a.daysHeld}j</span>` : ''}
+          <div class="info">
+            <div class="name">${a.name}</div>
+            <div class="meta-row"><span class="tag" style="background:${m.bg};color:${m.fg}">${m.icon} ${m.label}</span>${held ? `<span class="days-held">${held}</span>` : ''}</div>
           </div>
         </div>
       `));
@@ -669,13 +646,18 @@ function renderPivotFlow() {
   if (step === 3) {
     const card = el(`
       <div class="card">
+        ${stepTrack('Étape 3 / 4', 3, 4)}
         <h1 class="title">Vrai signal, ou fuite ?</h1>
-        <p class="lead">
-          <b style="color:var(--text)">Vrai signal</b> = le marché a clairement dit non, avec une preuve concrète (ex: X prospects contactés, 0 intérêt réel).<br><br>
-          <b style="color:var(--text)">Fuite</b> = baisse de motivation, pas encore de résultat mais c'est normal à ce stade, ou juste une nouvelle idée plus excitante sur le moment.
-        </p>
-        <button class="btn secondary" id="is-leak">😅 En fait... c'est une fuite. Je continue.</button>
-        <button class="btn amber" id="is-signal">C'est un vrai signal. J'arrête ce projet.</button>
+        <div class="choice-cards">
+          <button type="button" class="choice-card" id="is-leak">
+            <span class="emoji">🌫️</span>
+            <span><h4>C'est une fuite</h4><p>Baisse de motivation, pas encore de preuve. Je continue.</p></span>
+          </button>
+          <button type="button" class="choice-card" id="is-signal">
+            <span class="emoji">🎯</span>
+            <span><h4>C'est un vrai signal</h4><p>Preuve concrète que ça ne marche pas. J'arrête.</p></span>
+          </button>
+        </div>
       </div>
     `);
     root.appendChild(card);
@@ -689,24 +671,22 @@ function renderPivotFlow() {
     const daysHeld = Math.max(1, daysBetween(new Date(eng.startDate), new Date()) + 1);
     const card = el(`
       <div class="card">
-        <h2 class="subtitle">Ok. On documente, proprement.</h2>
-        <p class="lead">Ça devient une entrée dans ton journal — pour que la prochaine fois, le miroir soit encore plus précis. Tu auras tenu <b style="color:var(--text)">${daysHeld} jours</b>.</p>
-        <label>Détail sur cet abandon (optionnel)</label>
-        <textarea id="final-detail" rows="3" placeholder="Qu'est-ce qui a vraiment cloché cette fois ?"></textarea>
-        <button class="btn red" id="confirm-abandon">Confirmer l'abandon de "${eng.name}"</button>
+        ${stepTrack('Étape 4 / 4', 4, 4)}
+        <h2 class="subtitle">On documente</h2>
+        <p class="lead">Tu auras tenu <b style="color:var(--text)">${daysHeld} jours</b> sur "${eng.name}".</p>
+        <div class="field"><span class="field-label">Tu y retournerais un jour ?</span><div id="retry-slot"></div></div>
+        <button class="btn red" id="confirm-abandon">Confirmer l'abandon</button>
         <button class="btn ghost" id="cancel-pivot">Annuler, je reste dessus</button>
       </div>
     `);
     root.appendChild(card);
+    const retryChoice = buildSingleChoice([{ value: 'yes', label: 'Peut-être un jour', icon: '🔁' }, { value: 'no', label: 'Non, terminé', icon: '🚫' }], null, false);
+    card.querySelector('#retry-slot').appendChild(retryChoice.container);
     card.querySelector('#confirm-abandon').onclick = () => {
       state.history.push({
-        id: crypto.randomUUID(),
-        name: eng.name,
-        outcome: 'abandoned',
-        reasonCategory: state.pivotDraft.reason,
-        reasonDetail: card.querySelector('#final-detail').value.trim(),
-        daysHeld,
-        date: new Date().toISOString()
+        id: crypto.randomUUID(), name: eng.name, outcome: 'abandoned',
+        reasonCategory: state.pivotDraft.reason, daysHeldEstimate: daysHeld,
+        wouldRetry: retryChoice.get(), date: new Date().toISOString()
       });
       state.currentEngagement = null;
       state.pivotDraft = null;
@@ -721,15 +701,11 @@ function renderPivotFlow() {
 function render() {
   if (!state.seenLanding) return renderLanding();
   if (state.pivotDraft) return renderPivotFlow();
-  if (!state.onboarded) {
-    if (state.onboardingStep === 2) return renderOnboardingEngagement();
-    return renderOnboardingJournal();
-  }
+  if (!state.onboarded) return state.onboardingStep === 2 ? renderOnboardingEngagement() : renderOnboardingJournal();
   if (!state.currentEngagement) return renderOnboardingEngagement();
   if (state.addingPast) return renderAddPastFromDashboard();
   return renderDashboard();
 }
-
 render();
 </script>
 </body>
