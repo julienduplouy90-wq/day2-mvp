@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 2 — Ne lâche plus au jour 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-0: #0a0b0f;
+    --bg-1: #12141c;
+    --card: #161923;
+    --card-border: #262b38;
+    --text: #f3f4f7;
+    --text-dim: #9aa2b4;
+    --text-faint: #676f82;
+    --primary: #7c6dfc;
+    --primary-hover: #8f82ff;
+    --primary-soft: #7c6dfc1f;
+    --amber: #f0a848;
+    --amber-soft: #f0a84820;
+    --red: #ff5c5c;
+    --red-soft: #ff5c5c1f;
+    --green: #45d18f;
+    --green-soft: #45d18f20;
+    --radius-lg: 20px;
+    --radius-md: 12px;
+    --shadow-card: 0 8px 30px -12px rgba(0,0,0,0.5);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, #241f3d 0%, transparent 60%),
+      linear-gradient(180deg, var(--bg-1), var(--bg-0) 65%);
+    background-attachment: fixed;
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 16px 30px;
+  }
+  h1, h2, h3 { font-family: 'Sora', 'Inter', sans-serif; }
+  .app { width: 100%; max-width: 500px; flex: 1; }
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .brand-mark {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--primary), #4f46e5);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    color: white;
+    box-shadow: 0 4px 16px -4px var(--primary);
+    flex-shrink: 0;
+  }
+  .brand-name { font-family: 'Sora', sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+  .brand-name span { color: var(--primary); }
+  .tagline { text-align: center; color: var(--text-dim); font-size: 14px; margin-bottom: 32px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: 30px 26px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-card);
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  h1.title { font-size: 23px; margin: 0 0 10px; letter-spacing: -0.3px; }
+  h2.subtitle { font-size: 17px; margin: 0 0 14px; font-weight: 700; }
+  p.lead { color: var(--text-dim); font-size: 14.5px; line-height: 1.55; margin: 0 0 4px; }
+  label { display: block; font-size: 12.5px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 7px; margin-top: 18px; }
+  input[type=text], input[type=number], textarea, select {
+    width: 100%;
+    background: var(--bg-0);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    color: var(--text);
+    font-size: 14.5px;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.15s;
+  }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--primary); }
+  input::placeholder, textarea::placeholder { color: var(--text-faint); }
+  .btn {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: transform 0.1s, background 0.15s, box-shadow 0.15s;
+    box-shadow: 0 6px 20px -8px var(--primary);
+  }
+  .btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn.secondary { background: transparent; border: 1px solid var(--card-border); color: var(--text); box-shadow: none; }
+  .btn.secondary:hover { border-color: var(--primary); background: var(--primary-soft); }
+  .btn.amber { background: var(--amber); color: #221703; box-shadow: 0 6px 20px -8px var(--amber); }
+  .btn.amber:hover { background: #f5b862; }
+  .btn.red { background: var(--red); box-shadow: 0 6px 20px -8px var(--red); }
+  .btn.red:hover { background: #ff7373; }
+  .btn.green { background: var(--green); color: #04241a; box-shadow: 0 6px 20px -8px var(--green); }
+  .btn.green:hover { background: #5be0a3; }
+  .btn.ghost {
+    background: none; border: none; box-shadow: none;
+    color: var(--text-faint);
+    text-decoration: underline;
+    width: auto; padding: 8px 0;
+    font-size: 13px; font-weight: 500;
+    margin-top: 10px;
+  }
+  .btn.ghost:hover { color: var(--text-dim); transform: none; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--primary-soft);
+    border: 1px solid #7c6dfc40;
+    color: #c3baff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 14px;
+  }
+  .progress-wrap { margin: 18px 0 4px; }
+  .progress-bar { height: 8px; background: var(--bg-0); border-radius: 100px; overflow: hidden; border: 1px solid var(--card-border); }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), #a78bfa); border-radius: 100px; transition: width 0.4s ease; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--text-faint); margin-top: 7px; }
+  .why-box {
+    background: var(--bg-0);
+    border-left: 3px solid var(--primary);
+    padding: 13px 15px;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    font-size: 14px;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 18px;
+    line-height: 1.5;
+  }
+  .journal-item {
+    background: var(--bg-0);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 13px 15px;
+    margin-bottom: 8px;
+  }
+  .journal-item .name { font-weight: 700; font-size: 14.5px; }
+  .journal-item .reason { color: var(--text-dim); font-size: 13px; margin-top: 3px; line-height: 1.4; }
+  .journal-item .meta-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .tag {
+    display: inline-block;
+    font-size: 11px; font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: var(--primary-soft);
+    color: #c3baff;
+  }
+  .tag.outcome-completed { background: var(--green-soft); color: #7ce8bb; }
+  .tag.outcome-abandoned { background: var(--red-soft); color: #ff9d9d; }
+  .days-held { font-size: 11.5px; color: var(--text-faint); }
+  .remove-x { float: right; cursor: pointer; color: var(--text-faint); font-size: 13px; }
+  .remove-x:hover { color: var(--red); }
+  .choice-grid { display: grid; gap: 8px; margin-top: 10px; }
+  .choice-btn {
+    text-align: left;
+    background: var(--bg-0);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 13px 15px;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .choice-btn:hover { border-color: var(--primary); background: var(--primary-soft); }
+  .insight-box {
+    background: var(--amber-soft);
+    border: 1px solid #f0a84845;
+    border-radius: var(--radius-md);
+    padding: 15px 16px;
+    font-size: 14px;
+    margin-top: 18px;
+    line-height: 1.55;
+    color: #f5d9ac;
+  }
+  .insight-box b { color: var(--amber); }
+  .pattern-card { display: flex; gap: 14px; margin-top: 6px; }
+  .pattern-stat { flex: 1; background: var(--bg-0); border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 14px; text-align: center; }
+  .pattern-stat .num { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 800; color: var(--primary); }
+  .pattern-stat .lbl { font-size: 11.5px; color: var(--text-faint); margin-top: 4px; line-height: 1.3; }
+  .center { text-align: center; }
+  .footer-link { text-align: center; display: block; color: var(--text-faint); font-size: 12px; margin-top: 20px; text-decoration: none; opacity: 0.7; }
+  .footer-link:hover { opacity: 1; }
+  .step-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; }
+  .step-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--card-border); transition: all 0.2s; }
+  .step-dots span.active { background: var(--primary); width: 20px; border-radius: 100px; }
+  .value-list { list-style: none; padding: 0; margin: 20px 0; display: flex; flex-direction: column; gap: 12px; }
+  .value-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--text-dim); line-height: 1.4; }
+  .value-list .ico { font-size: 18px; line-height: 1.2; }
+  .personal-note {
+    background: linear-gradient(135deg, #7c6dfc12, #4f46e512);
+    border: 1px solid #7c6dfc35;
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    font-size: 13.5px;
+    color: #c3baff;
+    line-height: 1.5;
+    margin: 18px 0 4px;
+  }
+  .badge-mvp {
+    display: inline-block;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    background: var(--amber-soft);
+    color: var(--amber);
+    margin-bottom: 16px;
+  }
+  .completion-banner {
+    background: linear-gradient(135deg, var(--green-soft), transparent);
+    border: 1px solid #45d18f45;
+    border-radius: var(--radius-md);
+    padding: 18px;
+    margin-top: 14px;
+    text-align: center;
+  }
+  .completion-banner .emoji { font-size: 30px; margin-bottom: 6px; }
+  .completion-banner h3 { margin: 0 0 6px; font-size: 16px; color: #7ce8bb; }
+  .completion-banner p { margin: 0; font-size: 13px; color: var(--text-dim); }
+  .global-footer { color: var(--text-faint); font-size: 11.5px; text-align: center; margin-top: 24px; opacity: 0.6; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="brand">
+    <div class="brand-mark">D2</div>
+    <div class="brand-name">Day<span>2</span></div>
+  </div>
+  <div class="tagline">Le jour où la motivation retombe — et où tu tiens quand même.</div>
+  <div id="root"></div>
+</div>
+<div class="global-footer">Day 2 · MVP v0.1 — construit en direct, testé en vrai</div>
+
+<script>
+const STORAGE_KEY = "day2_state_v2";
+
+function loadState() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (raw) return JSON.parse(raw);
+  return {
+    seenLanding: false,
+    onboarded: false,
+    onboardingStep: null,
+    pastAbandons: [],
+    currentEngagement: null,
+    history: [],
+    pivotDraft: null,
+    addingPast: false
+  };
+}
+function saveState(s) { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); render(); }
+
+let state = loadState();
+
+const REASON_CATEGORIES = [
+  { key: "Manque de résultats rapides", icon: "📉" },
+  { key: "Difficulté commerciale (prospection, vente)", icon: "🤝" },
+  { key: "Lassitude / routine qui s'installe", icon: "😴" },
+  { key: "Doute sur le marché / perte de sens", icon: "🌀" },
+  { key: "Avis extérieur / autre priorité", icon: "👥" },
+  { key: "Autre", icon: "✳️" }
+];
+function iconFor(reasonKey) {
+  const r = REASON_CATEGORIES.find(r => r.key === reasonKey);
+  return r ? r.icon : "✳️";
+}
+
+function daysBetween(a, b) { return Math.floor((b - a) / (1000 * 60 * 60 * 24)); }
+function el(html) { const div = document.createElement('div'); div.innerHTML = html.trim(); return div.firstChild; }
+
+function getAllAbandonRecords() {
+  const fromJournal = state.pastAbandons.map(a => ({ ...a }));
+  const fromHistory = (state.history || []).filter(h => h.outcome === 'abandoned');
+  return [...fromJournal, ...fromHistory];
+}
+function computePatternInsight() {
+  const records = getAllAbandonRecords();
+  if (records.length === 0) return null;
+  const counts = {};
+  records.forEach(r => counts[r.reasonCategory] = (counts[r.reasonCategory] || 0) + 1);
+  let topReason = null, topCount = 0;
+  Object.entries(counts).forEach(([k, v]) => { if (v > topCount) { topCount = v; topReason = k; } });
+  const withDays = records.filter(r => typeof r.daysHeld === 'number' && !isNaN(r.daysHeld));
+  const avgDays = withDays.length ? Math.round(withDays.reduce((s, r) => s + r.daysHeld, 0) / withDays.length) : null;
+  return { total: records.length, topReason, topCount, avgDays };
+}
+
+// ---------- LANDING ----------
+function renderLanding() {
+  const root = document.getElementById('root');
+  root.innerHTML = '';
+  const card = el(`
+    <div class="card">
+      <span class="badge-mvp">MVP · TEST EN COURS</span>
+      <h1 class="title">Ne lâche plus au jour 2.</h1>
+      <p class="lead">La plupart des projets solo meurent quelques semaines après le lancement — pas parce que l'idée est mauvaise, mais parce que la nouveauté s'estompe et qu'aucun résultat n'est encore là.</p>
+      <p class="lead" style="margin-top:10px">Day 2 te fait garder un œil sur ton propre pattern d'abandon, pour que tu puisses le voir venir — et choisir consciemment au lieu de switcher par réflexe.</p>
+      <ul class="value-list">
+        <li><span class="ico">📓</span><span><b>Ton journal des abandons</b> — un miroir de tes projets passés et des vraies raisons.</span></li>
+        <li><span class="ico">🎯</span><span><b>Un engagement clair</b> — une idée, une durée, une raison, toujours visible.</span></li>
+        <li><span class="ico">🛑</span><span><b>Une friction douce anti-pivot</b> — avant de tout lâcher, ton historique te le rappelle.</span></li>
+      </ul>
+      <div class="personal-note">Je construis cet outil parce que je vis ce pattern moi-même depuis des années. Ce n'est pas de la théorie — c'est ce que j'aurais aimé avoir.</div>
+      <button class="btn" id="start-btn">Commencer mon suivi →</button>
+    </div>
+  `);
+  root.appendChild(card);
+  card.querySelector('#start-btn').onclick = () => { state.seenLanding = true; saveState(state); };
+}
+
+// ---------- ONBOARDING STEP 1 : journal des abandons passés ----------
+function renderOnboardingJournal() {
+  const root = document.getElementById('root');
+  root.innerHTML = '';
+  const abandons = state.pastAbandons;
+
+  const card = el(`
+    <div class="card">
+      <div class="step-dots"><span class="active"></span><span></span></div>
+      <h1 class="title">Avant de commencer</h1>
+      <p class="lead">Liste 2-3 projets que t'as laissés tomber, et la vraie raison. Pas pour te juger — pour avoir un miroir la prochaine fois que t'as envie de tout arrêter.</p>
+      <div id="abandon-list" style="margin-top:16px"></div>
+      <label>Nom du projet abandonné</label>
+      <input type="text" id="ab-name" placeholder="Ex: SaaS paysagiste">
+      <label>Vraie raison</label>
+      <select id="ab-reason">${REASON_CATEGORIES.map(r => `<option value="${r.key}">${r.icon} ${r.key}</option>`).join('')}</select>
+      <label>Combien de temps environ as-tu tenu ? (jours, optionnel)</label>
+      <input type="number" id="ab-days" placeholder="Ex: 21" min="0">
+      <label>Détail (optionnel)</label>
+      <textarea id="ab-detail" rows="2" placeholder="Un mot de plus si tu veux..."></textarea>
+      <button class="btn secondary" id="add-abandon">+ Ajouter à la liste</button>
+      <button class="btn" id="continue-onboarding" ${abandons.length === 0 ? 'style="opacity:0.5"' : ''}>
+        Continuer ${abandons.length > 0 ? '(' + abandons.length + ' noté' + (abandons.length > 1 ? 's' : '') + ')' : ''}
+      </button>
+      ${abandons.length === 0 ? '<button class="btn ghost" id="skip-onboarding">Passer cette étape</button>' : ''}
+    </div>
+  `);
+  root.appendChild(card);
+
+  const list = card.querySelector('#abandon-list');
+  abandons.forEach(a => {
+    list.appendChild(el(`
+      <div class="journal-item">
+        <span class="remove-x" data-id="${a.id}">✕</span>
+        <div class="name">${a.name}</div>
+        <div class="reason">${a.reasonDetail || ''}</div>
+        <div class="meta-row">
+          <span class="tag">${iconFor(a.reasonCategory)} ${a.reasonCategory}</span>
+          ${typeof a.daysHeld === 'number' ? `<span class="days-held">tenu ${a.daysHeld}j</span>` : ''}
+        </div>
+      </div>
+    `));
+  });
+  list.querySelectorAll('.remove-x').forEach(x => {
+    x.onclick = () => { state.pastAbandons = state.pastAbandons.filter(a => a.id !== x.dataset.id); saveState(state); };
+  });
+
+  card.querySelector('#add-abandon').onclick = () => {
+    const name = card.querySelector('#ab-name').value.trim();
+    if (!name) return;
+    const daysVal = card.querySelector('#ab-days').value;
+    state.pastAbandons.push({
+      id: crypto.randomUUID(),
+      name,
+      reasonCategory: card.querySelector('#ab-reason').value,
+      reasonDetail: card.querySelector('#ab-detail').value.trim(),
+      daysHeld: daysVal !== '' ? parseInt(daysVal, 10) : null,
+      date: new Date().toISOString()
+    });
+    saveState(state);
+  };
+  const goNext = () => { state.onboardingStep = 2; saveState(state); };
+  card.querySelector('#continue-onboarding').onclick = () => { if (abandons.length > 0) goNext(); };
+  const skipBtn = card.querySelector('#skip-onboarding');
+  if (skipBtn) skipBtn.onclick = goNext;
+}
+
+// ---------- ONBOARDING STEP 2 : déclaration d'engagement ----------
+function renderOnboardingEngagement() {
+  const root = document.getElementById('root');
+  root.innerHTML = '';
+  const isFirstTime = !state.onboarded;
+  const card = el(`
+    <div class="card">
+      ${isFirstTime ? '<div class="step-dots"><span></span><span class="active"></span></div>' : ''}
+      <h1 class="title">${isFirstTime ? 'Ton engagement actuel' : 'Nouvel engagement'}</h1>
+      <p class="lead">Une seule idée. Une durée fixée. Une vraie raison. C'est ce qu'on va te remontrer chaque fois que t'as envie de switcher.</p>
+      <label>Ton idée / projet en cours</label>
+      <input type="text" id="eng-name" placeholder="Ex: Day 2 — l'app anti-pivot">
+      <label>Pourquoi cette idée précisément ?</label>
+      <textarea id="eng-why" rows="3" placeholder="Ce qui te motive vraiment sur ce projet, là, maintenant..."></textarea>
+      <label>Tu t'engages pour combien de temps avant de te permettre de remettre en cause ?</label>
+      <select id="eng-duration">
+        <option value="30">30 jours</option>
+        <option value="60">60 jours</option>
+        <option value="90" selected>90 jours</option>
+        <option value="180">180 jours</option>
+      </select>
+      <button class="btn" id="lock-engagement">Verrouiller mon engagement</button>
+    </div>
+  `);
+  root.appendChild(card);
+  card.querySelector('#lock-engagement').onclick = () => {
+    const name = card.querySelector('#eng-name').value.trim();
+    const why = card.querySelector('#eng-why').value.trim();
+    if (!name || !why) { alert("Remplis le nom et le pourquoi — c'est ça qui te retiendra plus tard."); return; }
+    state.currentEngagement = {
+      name, why,
+      durationDays: parseInt(card.querySelector('#eng-duration').value, 10),
+      startDate: new Date().toISOString()
+    };
+    state.onboarded = true;
+    state.onboardingStep = null;
+    saveState(state);
+  };
+}
+
+// ---------- DASHBOARD ----------
+function renderDashboard() {
+  const root = document.getElementById('root');
+  root.innerHTML = '';
+  const eng = state.currentEngagement;
+  const start = new Date(eng.startDate);
+  const today = new Date();
+  const dayNum = Math.max(1, daysBetween(start, today) + 1);
+  const pct = Math.min(100, Math.round((dayNum / eng.durationDays) * 100));
+  const remaining = Math.max(0, eng.durationDays - dayNum);
+  const isComplete = dayNum >= eng.durationDays;
+
+  const card = el(`
+    <div class="card">
+      <span class="pill">📆 Jour ${dayNum} / ${eng.durationDays}</span>
+      <h1 class="title">${eng.name}</h1>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+        <div class="progress-label"><span>${pct}% du parcours</span><span>${remaining} jours restants</span></div>
+      </div>
+      <div class="why-box">« ${eng.why} »</div>
+      ${isComplete ? `
+        <div class="completion-banner">
+          <div class="emoji">🎉</div>
+          <h3>Tu as tenu tout ton engagement !</h3>
+          <p>${eng.durationDays} jours sur "${eng.name}" — c'est déjà plus loin que beaucoup de tes projets passés. À toi de décider la suite.</p>
+        </div>
+        <button class="btn green" id="extend-engagement">Prolonger de ${eng.durationDays} jours de plus</button>
+        <button class="btn secondary" id="new-after-complete">Nouveau projet (celui-ci est un succès)</button>
+      ` : `
+        <button class="btn amber" id="want-pivot">😬 J'ai envie de tout changer</button>
+      `}
+    </div>
+  `);
+  root.appendChild(card);
+
+  const wantPivot = card.querySelector('#want-pivot');
+  if (wantPivot) wantPivot.onclick = () => { state.pivotDraft = { step: 1 }; saveState(state); };
+
+  const extendBtn = card.querySelector('#extend-engagement');
+  if (extendBtn) extendBtn.onclick = () => {
+    state.history.push({ id: crypto.randomUUID(), name: eng.name, why: eng.why, outcome: 'completed', daysHeld: eng.durationDays, date: new Date().toISOString() });
+    state.currentEngagement.startDate = new Date().toISOString();
+    saveState(state);
+  };
+  const newAfterBtn = card.querySelector('#new-after-complete');
+  if (newAfterBtn) newAfterBtn.onclick = () => {
+    state.history.push({ id: crypto.randomUUID(), name: eng.name, why: eng.why, outcome: 'completed', daysHeld: eng.durationDays, date: new Date().toISOString() });
+    state.currentEngagement = null;
+    saveState(state);
+  };
+
+  // Pattern insight card
+  const insight = computePatternInsight();
+  if (insight) {
+    const patternCard = el(`
+      <div class="card">
+        <h2 class="subtitle">🔍 Ton pattern</h2>
+        <div class="pattern-card">
+          <div class="pattern-stat"><div class="num">${insight.total}</div><div class="lbl">projet${insight.total > 1 ? 's' : ''} abandonné${insight.total > 1 ? 's' : ''}</div></div>
+          <div class="pattern-stat"><div class="num">${insight.avgDays !== null ? insight.avgDays + 'j' : '—'}</div><div class="lbl">tenu en moyenne</div></div>
+        </div>
+        <p class="lead" style="margin-top:14px">Raison la plus fréquente : <b style="color:var(--text)">${iconFor(insight.topReason)} ${insight.topReason}</b> (${insight.topCount}×)</p>
+      </div>
+    `);
+    root.appendChild(patternCard);
+  }
+
+  // Journal + history
+  const journalCard = el(`
+    <div class="card">
+      <h2 class="subtitle">📓 Ton journal (${state.pastAbandons.length + (state.history || []).length})</h2>
+      <div id="journal-list"></div>
+      <button class="btn ghost" id="add-past">+ Ajouter un projet abandonné passé</button>
+    </div>
+  `);
+  root.appendChild(journalCard);
+  const jlist = journalCard.querySelector('#journal-list');
+  const combined = [
+    ...state.pastAbandons.map(a => ({ ...a, outcome: 'abandoned' })),
+    ...(state.history || [])
+  ].sort((a, b) => new Date(b.date) - new Date(a.date));
+  if (combined.length === 0) {
+    jlist.appendChild(el(`<p class="lead" style="margin:0">Rien pour l'instant.</p>`));
+  }
+  combined.forEach(a => {
+    jlist.appendChild(el(`
+      <div class="journal-item">
+        <div class="name">${a.name}</div>
+        <div class="reason">${a.reasonDetail || a.why || ''}</div>
+        <div class="meta-row">
+          ${a.outcome === 'completed'
+            ? `<span class="tag outcome-completed">✅ réussi</span>`
+            : `<span class="tag outcome-abandoned">${iconFor(a.reasonCategory)} ${a.reasonCategory}</span>`}
+          ${typeof a.daysHeld === 'number' ? `<span class="days-held">tenu ${a.daysHeld}j</span>` : ''}
+        </div>
+      </div>
+    `));
+  });
+  journalCard.querySelector('#add-past').onclick = () => { state.addingPast = true; saveState(state); };
+
+  root.appendChild(el(`<a class="footer-link" href="#" id="reset-link">réinitialiser (démo/test)</a>`));
+  document.getElementById('reset-link').onclick = (e) => {
+    e.preventDefault();
+    if (confirm("Tout effacer ?")) { localStorage.removeItem(STORAGE_KEY); state = loadState(); render(); }
+  };
+}
+
+function renderAddPastFromDashboard() {
+  const root = document.getElementById('root');
+  root.innerHTML = '';
+  const card = el(`
+    <div class="card">
+      <h2 class="subtitle">Ajouter un projet abandonné</h2>
+      <label>Nom du projet</label>
+      <input type="text" id="ab-name">
+      <label>Vraie raison</label>
+      <select id="ab-reason">${REASON_CATEGORIES.map(r => `<option value="${r.key}">${r.icon} ${r.key}</option>`).join('')}</select>
+      <label>Combien de temps environ as-tu tenu ? (jours, optionnel)</label>
+      <input type="number" id="ab-days" min="0">
+      <label>Détail (optionnel)</label>
+      <textarea id="ab-detail" rows="2"></textarea>
+      <button class="btn" id="save-ab">Enregistrer</button>
+      <button class="btn secondary" id="cancel-ab">Annuler</button>
+    </div>
+  `);
+  root.appendChild(card);
+  card.querySelector('#save-ab').onclick = () => {
+    const name = card.querySelector('#ab-name').value.trim();
+    if (!name) return;
+    const daysVal = card.querySelector('#ab-days').value;
+    state.pastAbandons.push({
+      id: crypto.randomUUID(), name,
+      reasonCategory: card.querySelector('#ab-reason').value,
+      reasonDetail: card.querySelector('#ab-detail').value.trim(),
+      daysHeld: daysVal !== '' ? parseInt(daysVal, 10) : null,
+      date: new Date().toISOString()
+    });
+    state.addingPast = false;
+    saveState(state);
+  };
+  card.querySelector('#cancel-ab').onclick = () => { state.addingPast = false; saveState(state); };
+}
+
+// ---------- ANTI-PIVOT FLOW ----------
+function renderPivotFlow() {
+  const root = document.getElementById('root');
+  root.innerHTML = '';
+  const step = state.pivotDraft.step;
+
+  if (step === 1) {
+    const card = el(`
+      <div class="card">
+        <h1 class="title">Ok, respire.</h1>
+        <p class="lead">Avant de faire quoi que ce soit — qu'est-ce qui se passe là, concrètement ?</p>
+        <div class="choice-grid" id="reason-choices">
+          ${REASON_CATEGORIES.map(r => `<button class="choice-btn" data-r="${r.key}">${r.icon} ${r.key}</button>`).join('')}
+        </div>
+      </div>
+    `);
+    root.appendChild(card);
+    card.querySelectorAll('.choice-btn').forEach(b => {
+      b.onclick = () => { state.pivotDraft.reason = b.dataset.r; state.pivotDraft.step = 2; saveState(state); };
+    });
+    return;
+  }
+
+  if (step === 2) {
+    const reason = state.pivotDraft.reason;
+    const records = getAllAbandonRecords();
+    const sameReasonCount = records.filter(a => a.reasonCategory === reason).length;
+    const totalAbandons = records.length;
+    const insightData = computePatternInsight();
+    const eng = state.currentEngagement;
+    const currentDayNum = eng ? Math.max(1, daysBetween(new Date(eng.startDate), new Date()) + 1) : null;
+
+    let insight = '';
+    if (sameReasonCount > 0) {
+      insight = `C'est déjà arrivé <b>${sameReasonCount} fois</b> pour la même raison ("${reason}"). Ça commence à ressembler à un pattern, pas à un signal isolé.`;
+    } else if (totalAbandons > 0) {
+      insight = `T'as déjà abandonné <b>${totalAbandons} projet${totalAbandons > 1 ? 's' : ''}</b> par le passé. Nouvelle raison cette fois — mais même résultat si tu switches : encore un projet qui ne va pas au bout.`;
+    } else {
+      insight = `Tu n'as pas encore de projet abandonné dans ton journal — ce serait le premier. Prends 2 minutes avant de trancher.`;
+    }
+    if (insightData && insightData.avgDays !== null && currentDayNum !== null) {
+      insight += ` Pour comparaison : tu es à <b>${currentDayNum}j</b> sur ce projet, ta moyenne passée avant d'abandonner est de <b>${insightData.avgDays}j</b>.`;
+    }
+
+    const card = el(`
+      <div class="card">
+        <h2 class="subtitle">📓 Ton miroir</h2>
+        <div id="mirror-list"></div>
+        <div class="insight-box">${insight}</div>
+        <button class="btn" id="mirror-continue">J'ai regardé, je continue à réfléchir →</button>
+      </div>
+    `);
+    root.appendChild(card);
+    const mlist = card.querySelector('#mirror-list');
+    if (records.length === 0) {
+      mlist.appendChild(el(`<p class="lead" style="margin:0 0 4px">Ton journal est vide pour l'instant.</p>`));
+    }
+    records.forEach(a => {
+      mlist.appendChild(el(`
+        <div class="journal-item">
+          <div class="name">${a.name}</div>
+          <div class="meta-row">
+            <span class="tag">${iconFor(a.reasonCategory)} ${a.reasonCategory}</span>
+            ${typeof a.daysHeld === 'number' ? `<span class="days-held">tenu ${a.daysHeld}j</span>` : ''}
+          </div>
+        </div>
+      `));
+    });
+    card.querySelector('#mirror-continue').onclick = () => { state.pivotDraft.step = 3; saveState(state); };
+    return;
+  }
+
+  if (step === 3) {
+    const card = el(`
+      <div class="card">
+        <h1 class="title">Vrai signal, ou fuite ?</h1>
+        <p class="lead">
+          <b style="color:var(--text)">Vrai signal</b> = le marché a clairement dit non, avec une preuve concrète (ex: X prospects contactés, 0 intérêt réel).<br><br>
+          <b style="color:var(--text)">Fuite</b> = baisse de motivation, pas encore de résultat mais c'est normal à ce stade, ou juste une nouvelle idée plus excitante sur le moment.
+        </p>
+        <button class="btn secondary" id="is-leak">😅 En fait... c'est une fuite. Je continue.</button>
+        <button class="btn amber" id="is-signal">C'est un vrai signal. J'arrête ce projet.</button>
+      </div>
+    `);
+    root.appendChild(card);
+    card.querySelector('#is-leak').onclick = () => { state.pivotDraft = null; saveState(state); };
+    card.querySelector('#is-signal').onclick = () => { state.pivotDraft.step = 4; saveState(state); };
+    return;
+  }
+
+  if (step === 4) {
+    const eng = state.currentEngagement;
+    const daysHeld = Math.max(1, daysBetween(new Date(eng.startDate), new Date()) + 1);
+    const card = el(`
+      <div class="card">
+        <h2 class="subtitle">Ok. On documente, proprement.</h2>
+        <p class="lead">Ça devient une entrée dans ton journal — pour que la prochaine fois, le miroir soit encore plus précis. Tu auras tenu <b style="color:var(--text)">${daysHeld} jours</b>.</p>
+        <label>Détail sur cet abandon (optionnel)</label>
+        <textarea id="final-detail" rows="3" placeholder="Qu'est-ce qui a vraiment cloché cette fois ?"></textarea>
+        <button class="btn red" id="confirm-abandon">Confirmer l'abandon de "${eng.name}"</button>
+        <button class="btn ghost" id="cancel-pivot">Annuler, je reste dessus</button>
+      </div>
+    `);
+    root.appendChild(card);
+    card.querySelector('#confirm-abandon').onclick = () => {
+      state.history.push({
+        id: crypto.randomUUID(),
+        name: eng.name,
+        outcome: 'abandoned',
+        reasonCategory: state.pivotDraft.reason,
+        reasonDetail: card.querySelector('#final-detail').value.trim(),
+        daysHeld,
+        date: new Date().toISOString()
+      });
+      state.currentEngagement = null;
+      state.pivotDraft = null;
+      saveState(state);
+    };
+    card.querySelector('#cancel-pivot').onclick = () => { state.pivotDraft = null; saveState(state); };
+    return;
+  }
+}
+
+// ---------- ROUTER ----------
+function render() {
+  if (!state.seenLanding) return renderLanding();
+  if (state.pivotDraft) return renderPivotFlow();
+  if (!state.onboarded) {
+    if (state.onboardingStep === 2) return renderOnboardingEngagement();
+    return renderOnboardingJournal();
+  }
+  if (!state.currentEngagement) return renderOnboardingEngagement();
+  if (state.addingPast) return renderAddPastFromDashboard();
+  return renderDashboard();
+}
+
+render();
+</script>
+</body>
+</html>
