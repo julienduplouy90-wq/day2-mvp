@@ -78,6 +78,7 @@
   p.lead { color: var(--text-dim); font-size: 14px; line-height: 1.5; margin: 0 0 4px; }
   .field { margin-top: 18px; }
   .field-label { display: block; font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 8px; letter-spacing: 0.1px; }
+  .field-hint { display: block; font-size: 11px; color: var(--text-faint); margin-top: -4px; margin-bottom: 8px; }
   input[type=text] {
     width: 100%; background: var(--surface-alt); border: 1.5px solid var(--border);
     border-radius: var(--radius-md); padding: 13px 15px; color: var(--text);
@@ -189,6 +190,7 @@
   .completion-banner p { margin: 0; font-size: 12.5px; color: var(--text-dim); }
   .global-footer { color: var(--text-faint); font-size: 11px; text-align: center; margin-top: 20px; }
   .icon-inline { width: 12px; height: 12px; vertical-align: -1.5px; }
+  .next-badge { width: 40px; height: 40px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
 </style>
 </head>
 <body>
@@ -197,12 +199,13 @@
   <div class="tagline">Le jour où la motivation retombe — et où tu tiens quand même.</div>
   <div id="root"></div>
 </div>
-<div class="global-footer">Day 2 · MVP v0.3</div>
+<div class="global-footer">Day 2 · MVP v0.4</div>
 
 <script>
-const STORAGE_KEY = "day2_state_v3";
+const STORAGE_KEY = "day2_state_v4";
 const CHECK_SVG = `<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
 const CHECK_SVG_LG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><polyline points="20 6 9 17 4 12"/></svg>`;
+const ARROW_SVG_LG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
 
 function loadState() {
   const raw = localStorage.getItem(STORAGE_KEY);
@@ -252,11 +255,14 @@ function stepTrack(label, current, total) {
   for (let i = 0; i < total; i++) dots += `<span class="${i === current - 1 ? 'active' : ''}"></span>`;
   return `<div class="step-track"><span class="label">${label}</span><div class="step-dots">${dots}</div></div>`;
 }
-function tagHTML(reasonKey) {
-  const m = reasonMeta(reasonKey);
-  return `<span class="tag" style="background:${m.bg};color:${m.fg}"><span class="dot" style="background:${m.fg}"></span>${m.label}</span>`;
+function tagsHTML(reasonKeys) {
+  return (reasonKeys || []).map(k => {
+    const m = reasonMeta(k);
+    return `<span class="tag" style="background:${m.bg};color:${m.fg}"><span class="dot" style="background:${m.fg}"></span>${m.label}</span>`;
+  }).join('');
 }
 
+// Single-choice chip group.
 function buildSingleChoice(items, initial, colored) {
   let value = initial;
   const container = el(`<div class="chip-group"></div>`);
@@ -274,14 +280,19 @@ function buildSingleChoice(items, initial, colored) {
   paint();
   return { container, get: () => value };
 }
-function buildMultiChoice(items, initial) {
+// Multi-choice chip group (checkboxes). onChange(currentArray) fires after every toggle.
+function buildMultiChoice(items, initial, colored, onChange) {
   const set = new Set(initial || []);
   const container = el(`<div class="chip-group"></div>`);
   function paint() {
     container.innerHTML = '';
     items.forEach(it => {
-      const chip = el(`<button type="button" class="chip ${set.has(it.value) ? 'selected' : ''}">${set.has(it.value) ? CHECK_SVG : ''}<span>${it.label}</span></button>`);
-      chip.onclick = () => { set.has(it.value) ? set.delete(it.value) : set.add(it.value); paint(); };
+      const key = it.key || it.value;
+      const isSel = set.has(key);
+      const dot = colored && it.fg ? `<span class="dot" style="background:${it.fg}"></span>` : (isSel ? CHECK_SVG : '');
+      const chip = el(`<button type="button" class="chip ${isSel ? 'selected' : ''}">${dot}<span>${it.label}</span></button>`);
+      if (colored && it.bg) { chip.style.setProperty('--chip-bg', it.bg); chip.style.setProperty('--chip-fg', it.fg); }
+      chip.onclick = () => { isSel ? set.delete(key) : set.add(key); paint(); if (onChange) onChange(Array.from(set)); };
       container.appendChild(chip);
     });
   }
@@ -304,7 +315,7 @@ function computePatternInsight() {
   const records = getAllAbandonRecords();
   if (records.length === 0) return null;
   const counts = {};
-  records.forEach(r => counts[r.reasonCategory] = (counts[r.reasonCategory] || 0) + 1);
+  records.forEach(r => (r.reasonCategories || []).forEach(k => counts[k] = (counts[k] || 0) + 1));
   let topReason = null, topCount = 0;
   Object.entries(counts).forEach(([k, v]) => { if (v > topCount) { topCount = v; topReason = k; } });
   const withDays = records.filter(r => typeof r.daysHeldEstimate === 'number');
@@ -347,7 +358,11 @@ function renderOnboardingJournal() {
         <span class="field-label">Nom du projet</span>
         <input type="text" id="ab-name" placeholder="Ex: SaaS paysagiste">
       </div>
-      <div class="field"><span class="field-label">Pourquoi tu as arrêté ?</span><div id="ab-reason-slot"></div></div>
+      <div class="field">
+        <span class="field-label">Pourquoi tu as arrêté ?</span>
+        <span class="field-hint">Plusieurs choix possibles</span>
+        <div id="ab-reason-slot"></div>
+      </div>
       <div class="field"><span class="field-label">Combien de temps tenu ?</span><div id="ab-duration-slot"></div></div>
       <button class="btn secondary" id="add-abandon">+ Ajouter à la liste</button>
       <button class="btn" id="continue-onboarding" ${abandons.length === 0 ? 'disabled' : ''}>
@@ -358,7 +373,7 @@ function renderOnboardingJournal() {
   `);
   root.appendChild(card);
 
-  const reasonChoice = buildSingleChoice(REASONS, REASONS[0].key, true);
+  const reasonChoice = buildMultiChoice(REASONS, [], true);
   card.querySelector('#ab-reason-slot').appendChild(reasonChoice.container);
   const durationChoice = buildSingleChoice(DURATION_BUCKETS, 'unknown', false);
   card.querySelector('#ab-duration-slot').appendChild(durationChoice.container);
@@ -370,7 +385,7 @@ function renderOnboardingJournal() {
       <div class="journal-item">
         <div class="info">
           <div class="name">${a.name}</div>
-          <div class="meta-row">${tagHTML(a.reasonCategory)}${held ? `<span class="days-held">${held}</span>` : ''}</div>
+          <div class="meta-row">${tagsHTML(a.reasonCategories)}${held ? `<span class="days-held">${held}</span>` : ''}</div>
         </div>
         <span class="remove-x" data-id="${a.id}">&times;</span>
       </div>
@@ -382,12 +397,14 @@ function renderOnboardingJournal() {
 
   card.querySelector('#add-abandon').onclick = () => {
     const name = card.querySelector('#ab-name').value.trim();
-    if (!name) return;
+    if (!name) { alert("Donne un nom au projet."); return; }
+    const reasons = reasonChoice.get();
+    if (reasons.length === 0) { alert("Choisis au moins une raison."); return; }
     const bucket = durationChoice.get();
     const bm = bucketMeta(bucket);
     state.pastAbandons.push({
       id: crypto.randomUUID(), name,
-      reasonCategory: reasonChoice.get(),
+      reasonCategories: reasons,
       daysHeldBucket: bucket,
       daysHeldEstimate: bm ? bm.days : null,
       date: new Date().toISOString()
@@ -417,7 +434,7 @@ function renderOnboardingEngagement() {
     </div>
   `);
   root.appendChild(card);
-  const motivChoice = buildMultiChoice(MOTIVATIONS, []);
+  const motivChoice = buildMultiChoice(MOTIVATIONS, [], false);
   card.querySelector('#eng-motiv-slot').appendChild(motivChoice.container);
   const durationChoice = buildSingleChoice(ENGAGEMENT_DURATIONS, 90, false);
   card.querySelector('#eng-duration-slot').appendChild(durationChoice.container);
@@ -524,7 +541,7 @@ function renderDashboard() {
         <div class="info">
           <div class="name">${a.name}</div>
           <div class="meta-row">
-            ${a.outcome === 'completed' ? `<span class="tag outcome-completed">${CHECK_SVG} Réussi</span>` : tagHTML(a.reasonCategory)}
+            ${a.outcome === 'completed' ? `<span class="tag outcome-completed">${CHECK_SVG} Réussi</span>` : tagsHTML(a.reasonCategories)}
             ${held ? `<span class="days-held">${held}</span>` : ''}
           </div>
         </div>
@@ -546,14 +563,18 @@ function renderAddPastFromDashboard() {
     <div class="card">
       <h2 class="subtitle">Ajouter un abandon</h2>
       <div class="field"><span class="field-label">Nom du projet</span><input type="text" id="ab-name"></div>
-      <div class="field"><span class="field-label">Pourquoi tu as arrêté ?</span><div id="ab-reason-slot"></div></div>
+      <div class="field">
+        <span class="field-label">Pourquoi tu as arrêté ?</span>
+        <span class="field-hint">Plusieurs choix possibles</span>
+        <div id="ab-reason-slot"></div>
+      </div>
       <div class="field"><span class="field-label">Combien de temps tenu ?</span><div id="ab-duration-slot"></div></div>
       <button class="btn" id="save-ab">Enregistrer</button>
       <button class="btn secondary" id="cancel-ab">Annuler</button>
     </div>
   `);
   root.appendChild(card);
-  const reasonChoice = buildSingleChoice(REASONS, REASONS[0].key, true);
+  const reasonChoice = buildMultiChoice(REASONS, [], true);
   card.querySelector('#ab-reason-slot').appendChild(reasonChoice.container);
   const durationChoice = buildSingleChoice(DURATION_BUCKETS, 'unknown', false);
   card.querySelector('#ab-duration-slot').appendChild(durationChoice.container);
@@ -561,11 +582,13 @@ function renderAddPastFromDashboard() {
   card.querySelector('#save-ab').onclick = () => {
     const name = card.querySelector('#ab-name').value.trim();
     if (!name) return;
+    const reasons = reasonChoice.get();
+    if (reasons.length === 0) { alert("Choisis au moins une raison."); return; }
     const bucket = durationChoice.get();
     const bm = bucketMeta(bucket);
     state.pastAbandons.push({
       id: crypto.randomUUID(), name,
-      reasonCategory: reasonChoice.get(),
+      reasonCategories: reasons,
       daysHeldBucket: bucket,
       daysHeldEstimate: bm ? bm.days : null,
       date: new Date().toISOString()
@@ -586,32 +609,38 @@ function renderPivotFlow() {
       <div class="card">
         ${stepTrack('Étape 1 / 4', 1, 4)}
         <h1 class="title">Ok, respire.</h1>
-        <p class="lead">Qu'est-ce qui se passe, concrètement ?</p>
-        <div id="reason-slot" style="margin-top:6px"></div>
+        <p class="lead">Qu'est-ce qui se passe, concrètement ? Plusieurs choix possibles.</p>
+        <div id="reason-slot" style="margin-top:10px"></div>
+        <button class="btn" id="reason-continue" disabled>Continuer</button>
       </div>
     `);
     root.appendChild(card);
-    const choice = buildSingleChoice(REASONS, null, true);
+    const continueBtn = card.querySelector('#reason-continue');
+    const choice = buildMultiChoice(REASONS, [], true, (vals) => { continueBtn.disabled = vals.length === 0; });
     card.querySelector('#reason-slot').appendChild(choice.container);
-    choice.container.querySelectorAll('.chip').forEach((chip, i) => {
-      chip.addEventListener('click', () => { state.pivotDraft.reason = REASONS[i].key; state.pivotDraft.step = 2; saveState(state); });
-    });
+    continueBtn.onclick = () => {
+      const reasons = choice.get();
+      if (reasons.length === 0) return;
+      state.pivotDraft.reasons = reasons;
+      state.pivotDraft.step = 2;
+      saveState(state);
+    };
     return;
   }
 
   if (step === 2) {
-    const reason = state.pivotDraft.reason;
+    const currentReasons = state.pivotDraft.reasons || [];
     const records = getAllAbandonRecords();
-    const sameReasonCount = records.filter(a => a.reasonCategory === reason).length;
+    const matching = records.filter(r => (r.reasonCategories || []).some(rc => currentReasons.includes(rc)));
     const totalAbandons = records.length;
     const insightData = computePatternInsight();
     const eng = state.currentEngagement;
     const currentDayNum = eng ? Math.max(1, daysBetween(new Date(eng.startDate), new Date()) + 1) : null;
-    const rm = reasonMeta(reason);
+    const reasonLabels = currentReasons.map(k => reasonMeta(k).label).join(', ');
 
     let insight = '';
-    if (sameReasonCount > 0) insight = `${sameReasonCount}ᵉ fois pour "${rm.label}". Ça ressemble à un pattern.`;
-    else if (totalAbandons > 0) insight = `Déjà ${totalAbandons} abandon${totalAbandons > 1 ? 's' : ''} avant celui-ci.`;
+    if (matching.length > 0) insight = `Déjà ${matching.length} fois pour "${reasonLabels}". Ça ressemble à un pattern.`;
+    else if (totalAbandons > 0) insight = `Déjà ${totalAbandons} abandon${totalAbandons > 1 ? 's' : ''} avant celui-ci, raisons différentes cette fois.`;
     else insight = `Ce serait ton premier abandon noté. Prends 2 min avant de trancher.`;
     if (insightData && insightData.avgDays !== null && currentDayNum !== null) {
       insight += ` Tu es à <b>${currentDayNum}j</b> ici, ta moyenne passée est <b>${insightData.avgDays}j</b>.`;
@@ -635,7 +664,7 @@ function renderPivotFlow() {
         <div class="journal-item">
           <div class="info">
             <div class="name">${a.name}</div>
-            <div class="meta-row">${tagHTML(a.reasonCategory)}${held ? `<span class="days-held">${held}</span>` : ''}</div>
+            <div class="meta-row">${tagsHTML(a.reasonCategories)}${held ? `<span class="days-held">${held}</span>` : ''}</div>
           </div>
         </div>
       `));
@@ -686,14 +715,31 @@ function renderPivotFlow() {
     card.querySelector('#confirm-abandon').onclick = () => {
       state.history.push({
         id: crypto.randomUUID(), name: eng.name, outcome: 'abandoned',
-        reasonCategory: state.pivotDraft.reason, daysHeldEstimate: daysHeld,
+        reasonCategories: state.pivotDraft.reasons, daysHeldEstimate: daysHeld,
         wouldRetry: retryChoice.get(), date: new Date().toISOString()
       });
       state.currentEngagement = null;
-      state.pivotDraft = null;
+      state.pivotDraft.step = 5;
       saveState(state);
     };
     card.querySelector('#cancel-pivot').onclick = () => { state.pivotDraft = null; saveState(state); };
+    return;
+  }
+
+  if (step === 5) {
+    const insight = computePatternInsight();
+    const rm = insight ? reasonMeta(insight.topReason) : null;
+    const card = el(`
+      <div class="card">
+        <div class="next-badge">${ARROW_SVG_LG}</div>
+        <h1 class="title">Direction le prochain.</h1>
+        <p class="lead">C'est noté dans ton journal — même un abandon appris, ça compte pour la suite.</p>
+        ${rm ? `<div class="insight-box">Ton point de vigilance n°1 : <b>${rm.label}</b>. La prochaine fois, repère-le plus vite — c'est déjà un vrai progrès.</div>` : ''}
+        <button class="btn" id="find-next">Trouver mon prochain projet</button>
+      </div>
+    `);
+    root.appendChild(card);
+    card.querySelector('#find-next').onclick = () => { state.pivotDraft = null; saveState(state); };
     return;
   }
 }
